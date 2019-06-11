@@ -1,0 +1,16 @@
+{
+    "name": "mikeamelung/cranial-bundle",
+    "description": "A Symfony bundle providing a content server for Cranial.",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "require": {
+        "php": "^7.1.3",
+        "erusev/parsedown": "^1.7",
+        "ramsey/uuid": "^3.8"
+    },
+    "autoload": {
+        "psr-4": {
+            "MikeAmelung\\CranialBundle\\": ""
+        }
+    }
+}

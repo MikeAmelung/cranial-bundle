@@ -1,0 +1,13 @@
+services:
+    MikeAmelung\CranialBundle\Utils\Markdown:
+    MikeAmelung\CranialBundle\Controller\:
+        resource: "../../Controller"
+        tags: ["controller.service_arguments"]
+    MikeAmelung\CranialBundle\Twig\CranialExtension:
+        arguments: ['@MikeAmelung\CranialBundle\Utils\Markdown']
+        tags: ["twig.extension"]
+    MikeAmelung\CranialBundle\Service\ContentManager:
+        arguments:
+            $configDirectory: "%mike_amelung_cranial.config_directory%"
+            $contentDirectory: "%mike_amelung_cranial.content_directory%"
+            $twig: "@twig"

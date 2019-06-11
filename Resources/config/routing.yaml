@@ -1,0 +1,3 @@
+cranial_two:
+    resource: ../../Controller/
+    type: annotation
