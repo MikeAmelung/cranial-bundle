@@ -114,9 +114,21 @@ class ContentManager
         return "<div data-content-id=\"$id\"></div>";
     }
 
-    public function renderPageSlot($pageId, $slotKey, $container = true)
+    public function renderPageSlot($pageId, $slotKey, $container = ['tag' => 'div'])
     {
-        $output = $container ? "<div data-page-id=\"$pageId\" data-slot-key=\"$slotKey\">" : "";
+        if ($container) {
+            $attrs = "";
+
+            if (isset($container['attr'])) {
+                foreach ($container['attr'] as $attr => $val) {
+                    $attrs .= "$attr=\"$val\"";
+                }
+            }
+
+            $output = "<{$container['tag']} data-page-id=\"$pageId\" data-slot-key=\"$slotKey\" $attrs>";
+        } else {
+            $output = '';
+        }
 
         if (isset($this->pages[$pageId]['contentMap'][$slotKey])) {
             foreach ($this->pages[$pageId]['contentMap'][$slotKey] as $contentId) {
@@ -124,7 +136,9 @@ class ContentManager
             }
         }
 
-        $output .= $container ? '</div>' : '';
+        if ($container) {
+            $output .= "</{$container['tag']}>";
+        }
 
         return $output;
     }

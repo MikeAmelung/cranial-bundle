@@ -15,4 +15,9 @@ class Markdown
     {
         return $this->parser->text($text);
     }
+
+    public function toHtmlInline(string $text): string
+    {
+        return $this->parser->line($text);
+    }
 }

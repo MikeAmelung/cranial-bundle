@@ -22,11 +22,20 @@ class CranialExtension extends AbstractExtension
                 'is_safe' => ['html'],
                 'pre_escape' => 'html',
             ]),
+            new TwigFilter('mdinline', [$this, 'markdownToHtmlInline'], [
+                'is_safe' => ['html'],
+                'pre_escape' => 'html',
+            ]),
         ];
     }
 
     public function markdownToHtml($content)
     {
         return $this->parser->toHtml($content);
+    }
+
+    public function markdownToHtmlInline($content)
+    {
+        return $this->parser->toHtmlInline($content);
     }
 }
