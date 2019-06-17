@@ -105,7 +105,7 @@ class ContentController extends AbstractController
 
         $content = $contentManager->updateContent($r['id'], $r['content']);
 
-        $rendered = $contentManager->renderContentWithoutContainer($r['id']);
+        $rendered = $contentManager->renderContent($r['id']);
 
         return new JsonResponse([
             'errors' => [],

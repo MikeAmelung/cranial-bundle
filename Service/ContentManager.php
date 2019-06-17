@@ -88,18 +88,6 @@ class ContentManager
         return $this->content;
     }
 
-    public function renderContentWithoutContainer($id)
-    {
-        if (isset($this->content[$id]) && isset($this->content[$id]['templateKey'])) {
-            return $this->twig->render(
-                'content/' . $this->content[$id]['templateKey'] . '.html.twig',
-                array_merge([
-                    'unwrap' => true,
-                ], $this->content[$id]['data'])
-            );
-        }
-    }
-
     public function renderContent($id)
     {
         if (isset($this->content[$id]) && isset($this->content[$id]['templateKey'])) {
