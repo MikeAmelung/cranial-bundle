@@ -88,16 +88,24 @@ class ContentManager
         return $this->content;
     }
 
-    public function renderContent($id, $options = [])
+    public function renderContent($id, $container = ['tag' => 'div'])
     {
-        if (isset($options['vars'])) {
-            $vars = $options['vars'];
+        if ($container) {
+            $attrs = "";
+
+            if (isset($container['attr'])) {
+                foreach ($container['attr'] as $attr => $val) {
+                    $attrs .= "$attr=\"$val\"";
+                }
+            }
+
+            $output = "<{$container['tag']} data-content-id=\"$id\" $attrs>";
         } else {
-            $vars = [];
+            $output = '';
         }
 
         if (isset($this->content[$id]) && isset($this->content[$id]['templateKey'])) {
-            return $this->twig->render(
+            $output .= $this->twig->render(
                 'content/' . $this->content[$id]['templateKey'] . '.html.twig',
                 array_merge(
                     [
@@ -107,6 +115,14 @@ class ContentManager
                     $this->content[$id]['data']
                 )
             );
+        }
+
+        if ($container) {
+            $output .= "</{$container['tag']}>";
+        }
+
+        if ($output) {
+            return $output;
         }
 
         return "<div data-content-id=\"$id\"></div>";
