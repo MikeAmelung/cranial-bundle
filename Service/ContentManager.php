@@ -88,7 +88,7 @@ class ContentManager
         return $this->content;
     }
 
-    public function renderContent($id, $options)
+    public function renderContent($id, $options = [])
     {
         if (isset($options['vars'])) {
             $vars = $options['vars'];
