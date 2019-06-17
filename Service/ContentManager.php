@@ -111,7 +111,6 @@ class ContentManager
                     [
                         'id' => $id,
                     ],
-                    $vars,
                     $this->content[$id]['data']
                 )
             );
