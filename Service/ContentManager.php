@@ -88,14 +88,24 @@ class ContentManager
         return $this->content;
     }
 
-    public function renderContent($id)
+    public function renderContent($id, $options)
     {
+        if (isset($options['vars'])) {
+            $vars = $options['vars'];
+        } else {
+            $vars = [];
+        }
+
         if (isset($this->content[$id]) && isset($this->content[$id]['templateKey'])) {
             return $this->twig->render(
                 'content/' . $this->content[$id]['templateKey'] . '.html.twig',
-                array_merge([
-                    'id' => $id,
-                ], $this->content[$id]['data'])
+                array_merge(
+                    [
+                        'id' => $id,
+                    ],
+                    $vars,
+                    $this->content[$id]['data']
+                )
             );
         }
 
