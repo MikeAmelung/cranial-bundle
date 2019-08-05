@@ -14,20 +14,43 @@ class ContentManager
 
     private $contentDirectory;
     private $content;
+    private $images;
     private $pages;
 
     private $twig;
 
-    public function __construct($configDirectory, $contentDirectory, Environment $twig)
-    {
+    public function __construct(
+        $configDirectory,
+        $contentDirectory,
+        Environment $twig
+    ) {
         $this->configDirectory = $configDirectory;
-        $this->types = json_decode(file_get_contents($configDirectory . '/content_types.json'), true);
-        $this->templates = json_decode(file_get_contents($configDirectory . '/content_templates.json'), true);
-        $this->pageTemplates = json_decode(file_get_contents($configDirectory . '/page_templates.json'), true);
+        $this->types = json_decode(
+            file_get_contents($configDirectory . '/content_types.json'),
+            true
+        );
+        $this->templates = json_decode(
+            file_get_contents($configDirectory . '/content_templates.json'),
+            true
+        );
+        $this->pageTemplates = json_decode(
+            file_get_contents($configDirectory . '/page_templates.json'),
+            true
+        );
 
         $this->contentDirectory = $contentDirectory;
-        $this->content = json_decode(file_get_contents($contentDirectory . '/content.json'), true);
-        $this->pages = json_decode(file_get_contents($contentDirectory . '/pages.json'), true);
+        $this->content = json_decode(
+            file_get_contents($contentDirectory . '/content.json'),
+            true
+        );
+        $this->images = json_decode(
+            file_get_contents($contentDirectory . '/images.json'),
+            true
+        );
+        $this->pages = json_decode(
+            file_get_contents($contentDirectory . '/pages.json'),
+            true
+        );
 
         $this->twig = $twig;
     }
@@ -42,10 +65,13 @@ class ContentManager
         }
         $this->content[$id]['meta'][] = [
             'label' => 'Last Updated',
-            'value' => (new \DateTime())->format('m/d/Y H:i:s'),
+            'value' => (new \DateTime())->format('m/d/Y H:i:s')
         ];
 
-        file_put_contents($this->contentDirectory . '/content.json', json_encode($this->content));
+        file_put_contents(
+            $this->contentDirectory . '/content.json',
+            json_encode($this->content)
+        );
 
         return ['id' => $id, 'content' => $this->content[$id]];
     }
@@ -59,10 +85,13 @@ class ContentManager
         }
         $this->content[$id]['meta'][] = [
             'label' => 'Last Updated',
-            'value' => (new \DateTime())->format('m/d/Y H:i:s'),
+            'value' => (new \DateTime())->format('m/d/Y H:i:s')
         ];
 
-        file_put_contents($this->contentDirectory . '/content.json', json_encode($this->content));
+        file_put_contents(
+            $this->contentDirectory . '/content.json',
+            json_encode($this->content)
+        );
 
         return $this->content[$id];
     }
@@ -73,7 +102,10 @@ class ContentManager
             unset($this->content[$id]);
         }
 
-        file_put_contents($this->contentDirectory . '/content.json', json_encode($this->content));
+        file_put_contents(
+            $this->contentDirectory . '/content.json',
+            json_encode($this->content)
+        );
     }
 
     public function content($id)
@@ -104,12 +136,15 @@ class ContentManager
             $output = '';
         }
 
-        if (isset($this->content[$id]) && isset($this->content[$id]['templateKey'])) {
+        if (
+            isset($this->content[$id]) &&
+            isset($this->content[$id]['templateKey'])
+        ) {
             $output .= $this->twig->render(
                 'content/' . $this->content[$id]['templateKey'] . '.html.twig',
                 array_merge(
                     [
-                        'id' => $id,
+                        'id' => $id
                     ],
                     $this->content[$id]['data']
                 )
@@ -127,8 +162,11 @@ class ContentManager
         return "<div data-content-id=\"$id\"></div>";
     }
 
-    public function renderPageSlot($pageId, $slotKey, $container = ['tag' => 'div'])
-    {
+    public function renderPageSlot(
+        $pageId,
+        $slotKey,
+        $container = ['tag' => 'div']
+    ) {
         if ($container) {
             $attrs = "";
 
@@ -144,7 +182,10 @@ class ContentManager
         }
 
         if (isset($this->pages[$pageId]['contentMap'][$slotKey])) {
-            foreach ($this->pages[$pageId]['contentMap'][$slotKey] as $contentId) {
+            foreach (
+                $this->pages[$pageId]['contentMap'][$slotKey]
+                as $contentId
+            ) {
                 $output .= $this->renderContent($contentId);
             }
         }
@@ -154,6 +195,71 @@ class ContentManager
         }
 
         return $output;
+    }
+
+    public function createImage($image)
+    {
+        $id = Uuid::uuid4()->toString();
+        $this->images[$id] = $image;
+
+        if (!isset($this->images[$id]['meta'])) {
+            $this->images[$id]['meta'] = [];
+        }
+        $this->images[$id]['meta'][] = [
+            'label' => 'Last Updated',
+            'value' => (new \DateTime())->format('m/d/Y H:i:s')
+        ];
+
+        file_put_contents(
+            $this->contentDirectory . '/images.json',
+            json_encode($this->images)
+        );
+
+        return ['id' => $id, 'images' => $this->images[$id]];
+    }
+
+    public function updateImage($id, $image)
+    {
+        $this->images[$id] = $image;
+
+        if (!isset($this->images[$id]['meta'])) {
+            $this->images[$id]['meta'] = [];
+        }
+        $this->images[$id]['meta'][] = [
+            'label' => 'Last Updated',
+            'value' => (new \DateTime())->format('m/d/Y H:i:s')
+        ];
+
+        file_put_contents(
+            $this->contentDirectory . '/images.json',
+            json_encode($this->images)
+        );
+
+        return $this->images[$id];
+    }
+
+    public function deleteImage($id)
+    {
+        if (isset($this->images[$id])) {
+            unset($this->images[$id]);
+        }
+
+        file_put_contents(
+            $this->contentDirectory . '/images.json',
+            json_encode($this->images)
+        );
+    }
+
+    public function image($id)
+    {
+        if (isset($this->images[$id])) {
+            return $this->images[$id];
+        }
+    }
+
+    public function allImages()
+    {
+        return $this->images;
     }
 
     public function createPage($page)
@@ -166,10 +272,13 @@ class ContentManager
         }
         $this->pages[$id]['meta'][] = [
             'label' => 'Last Updated',
-            'value' => (new \DateTime())->format('m/d/Y H:i:s'),
+            'value' => (new \DateTime())->format('m/d/Y H:i:s')
         ];
 
-        file_put_contents($this->contentDirectory . '/pages.json', json_encode($this->pages));
+        file_put_contents(
+            $this->contentDirectory . '/pages.json',
+            json_encode($this->pages)
+        );
 
         return ['id' => $id, 'page' => $this->pages[$id]];
     }
@@ -185,10 +294,13 @@ class ContentManager
         }
         $this->pages[$id]['meta'][] = [
             'label' => 'Last Updated',
-            'value' => (new \DateTime())->format('m/d/Y H:i:s'),
+            'value' => (new \DateTime())->format('m/d/Y H:i:s')
         ];
 
-        file_put_contents($this->contentDirectory . '/pages.json', json_encode($this->pages));
+        file_put_contents(
+            $this->contentDirectory . '/pages.json',
+            json_encode($this->pages)
+        );
 
         return $this->pages[$id];
     }
@@ -199,7 +311,10 @@ class ContentManager
             unset($this->pages[$id]);
         }
 
-        file_put_contents($this->contentDirectory . '/pages.json', json_encode($this->pages));
+        file_put_contents(
+            $this->contentDirectory . '/pages.json',
+            json_encode($this->pages)
+        );
     }
 
     public function page($id)
@@ -221,7 +336,7 @@ class ContentManager
 
                     return [
                         'pageId' => $pageId,
-                        'templateId' => $pageTemplate['id'],
+                        'templateId' => $pageTemplate['id']
                     ];
                 }
             }

@@ -11,12 +11,16 @@ class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder('mike_amelung_cranial');
 
-        $treeBuilder->getRootNode()
+        $treeBuilder
+            ->getRootNode()
             ->children()
-                ->scalarNode('config_directory')->end()
-                ->scalarNode('content_directory')->end()
+            ->scalarNode('config_directory')
             ->end()
-        ;
+            ->scalarNode('content_directory')
+            ->end()
+            ->scalarNode('image_directory')
+            ->end()
+            ->end();
 
         return $treeBuilder;
     }

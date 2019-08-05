@@ -23,10 +23,14 @@ class MikeAmelungCranialExtension extends Extension
             'mike_amelung_cranial.content_directory',
             $config['content_directory']
         );
+        $container->setParameter(
+            'mike_amelung_cranial.image_directory',
+            $config['image_directory']
+        );
 
         $loader = new YamlFileLoader(
             $container,
-            new FileLocator(__DIR__.'/../Resources/config')
+            new FileLocator(__DIR__ . '/../Resources/config')
         );
         $loader->load('services.yaml');
     }

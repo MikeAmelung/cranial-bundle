@@ -11,3 +11,8 @@ services:
             $configDirectory: "%mike_amelung_cranial.config_directory%"
             $contentDirectory: "%mike_amelung_cranial.content_directory%"
             $twig: "@twig"
+    MikeAmelung\CranialBundle\Command\ScanImagesCommand:
+        arguments:
+            $contentDirectory: "%mike_amelung_cranial.content_directory%"
+            $imageDirectory: "%mike_amelung_cranial.image_directory%"
+        tags: ["console.command"]

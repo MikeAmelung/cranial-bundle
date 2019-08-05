@@ -18,39 +18,45 @@ class ContentController extends AbstractController
     /**
      * @Route("/content-types", name="mikeamelung_cranial_get_types", methods={"GET"})
      */
-    public function contentTypes(ContentManager $contentManager, Request $request)
-    {
+    public function contentTypes(
+        ContentManager $contentManager,
+        Request $request
+    ) {
         $types = $contentManager->getTypes();
 
         return new JsonResponse([
             'errors' => [],
-            'types' => $types,
+            'types' => $types
         ]);
     }
 
     /**
      * @Route("/content-templates", name="mikeamelung_cranial_get_templates", methods={"GET"})
      */
-    public function contentTemplates(ContentManager $contentManager, Request $request)
-    {
+    public function contentTemplates(
+        ContentManager $contentManager,
+        Request $request
+    ) {
         $templates = $contentManager->getTemplates();
 
         return new JsonResponse([
             'errors' => [],
-            'templates' => $templates,
+            'templates' => $templates
         ]);
     }
 
     /**
      * @Route("/page-templates", name="mikeamelung_cranial_get_pages", methods={"GET"})
      */
-    public function pageTemplates(ContentManager $contentManager, Request $request)
-    {
+    public function pageTemplates(
+        ContentManager $contentManager,
+        Request $request
+    ) {
         $pageTemplates = $contentManager->getPageTemplates();
 
         return new JsonResponse([
             'errors' => [],
-            'pageTemplates' => $pageTemplates,
+            'pageTemplates' => $pageTemplates
         ]);
     }
 
@@ -63,28 +69,33 @@ class ContentController extends AbstractController
 
         return new JsonResponse([
             'errors' => [],
-            'content' => $content,
+            'content' => $content
         ]);
     }
 
     /**
      * @Route("/content/{id}", name="mikeamelung_cranial_get_content", methods={"GET"})
      */
-    public function content(ContentManager $contentManager, Request $request, $id)
-    {
+    public function content(
+        ContentManager $contentManager,
+        Request $request,
+        $id
+    ) {
         $content = $contentManager->content($id);
 
         return new JsonResponse([
             'errors' => [],
-            'content' => $content,
+            'content' => $content
         ]);
     }
 
     /**
      * @Route("/content/create", name="mikeamelung_cranial_create_content", methods={"POST"})
      */
-    public function createContent(ContentManager $contentManager, Request $request)
-    {
+    public function createContent(
+        ContentManager $contentManager,
+        Request $request
+    ) {
         $r = json_decode($request->getContent(), true);
 
         $contentAndId = $contentManager->createContent($r['content']);
@@ -92,15 +103,17 @@ class ContentController extends AbstractController
         return new JsonResponse([
             'errors' => [],
             'id' => $contentAndId['id'],
-            'content' => $contentAndId['content'],
+            'content' => $contentAndId['content']
         ]);
     }
 
     /**
      * @Route("/content/update", name="mikeamelung_cranial_update_content", methods={"POST"})
      */
-    public function updateContent(ContentManager $contentManager, Request $request)
-    {
+    public function updateContent(
+        ContentManager $contentManager,
+        Request $request
+    ) {
         $r = json_decode($request->getContent(), true);
 
         $content = $contentManager->updateContent($r['id'], $r['content']);
@@ -110,19 +123,98 @@ class ContentController extends AbstractController
         return new JsonResponse([
             'errors' => [],
             'content' => $content,
-            'rendered' => $rendered,
+            'rendered' => $rendered
         ]);
     }
 
     /**
      * @Route("/content/{id}", name="mikeamelung_cranial_delete_content", methods={"DELETE"})
      */
-    public function deleteContent(ContentManager $contentManager, Request $request, $id)
-    {
+    public function deleteContent(
+        ContentManager $contentManager,
+        Request $request,
+        $id
+    ) {
         $contentManager->deleteContent($id);
 
         return new JsonResponse([
+            'errors' => []
+        ]);
+    }
+
+    /**
+     * @Route("/all-images", name="mikeamelung_cranial_all_images", methods={"GET"})
+     */
+    public function allImages(ContentManager $contentManager, Request $request)
+    {
+        $images = $contentManager->allImages();
+
+        return new JsonResponse([
             'errors' => [],
+            'images' => $images
+        ]);
+    }
+
+    /**
+     * @Route("/image/{id}", name="mikeamelung_cranial_get_image", methods={"GET"})
+     */
+    public function image(ContentManager $contentManager, Request $request, $id)
+    {
+        $image = $contentManager->image($id);
+
+        return new JsonResponse([
+            'errors' => [],
+            'image' => $image
+        ]);
+    }
+
+    /**
+     * @Route("/image/create", name="mikeamelung_cranial_create_image", methods={"POST"})
+     */
+    public function createImage(
+        ContentManager $contentManager,
+        Request $request
+    ) {
+        $r = json_decode($request->getContent(), true);
+
+        $imageAndId = $contentManager->createImage($r['image']);
+
+        return new JsonResponse([
+            'errors' => [],
+            'id' => $imageAndId['id'],
+            'image' => $imageAndId['image']
+        ]);
+    }
+
+    /**
+     * @Route("/image/update", name="mikeamelung_cranial_update_image", methods={"POST"})
+     */
+    public function updateImage(
+        ContentManager $contentManager,
+        Request $request
+    ) {
+        $r = json_decode($request->getContent(), true);
+
+        $image = $contentManager->updateImage($r['id'], $r['image']);
+
+        return new JsonResponse([
+            'errors' => [],
+            'image' => $image
+        ]);
+    }
+
+    /**
+     * @Route("/image/{id}", name="mikeamelung_cranial_delete_image", methods={"DELETE"})
+     */
+    public function deleteImage(
+        ContentManager $contentManager,
+        Request $request,
+        $id
+    ) {
+        $contentManager->deleteImage($id);
+
+        return new JsonResponse([
+            'errors' => []
         ]);
     }
 
@@ -135,7 +227,7 @@ class ContentController extends AbstractController
 
         return new JsonResponse([
             'errors' => [],
-            'pages' => $pages,
+            'pages' => $pages
         ]);
     }
 
@@ -148,7 +240,7 @@ class ContentController extends AbstractController
 
         return new JsonResponse([
             'errors' => [],
-            'page' => $page,
+            'page' => $page
         ]);
     }
 
@@ -164,7 +256,7 @@ class ContentController extends AbstractController
         return new JsonResponse([
             'errors' => [],
             'id' => $pageAndId['id'],
-            'page' => $pageAndId['page'],
+            'page' => $pageAndId['page']
         ]);
     }
 
@@ -180,25 +272,32 @@ class ContentController extends AbstractController
         $renderedSlots = [];
 
         foreach ($r['page']['contentMap'] as $slotKey => $contentIds) {
-            $renderedSlots[$slotKey] = $contentManager->renderPageSlot($r['id'], $slotKey, false);
+            $renderedSlots[$slotKey] = $contentManager->renderPageSlot(
+                $r['id'],
+                $slotKey,
+                false
+            );
         }
 
         return new JsonResponse([
             'errors' => [],
             'page' => $page,
-            'renderedSlots' => $renderedSlots,
+            'renderedSlots' => $renderedSlots
         ]);
     }
 
     /**
      * @Route("/page/{id}", name="mikeamelung_cranial_delete_page", methods={"DELETE"})
      */
-    public function deletePage(ContentManager $contentManager, Request $request, $id)
-    {
+    public function deletePage(
+        ContentManager $contentManager,
+        Request $request,
+        $id
+    ) {
         $contentManager->deletePage($id);
 
         return new JsonResponse([
-            'errors' => [],
+            'errors' => []
         ]);
     }
 }
