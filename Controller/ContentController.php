@@ -175,9 +175,11 @@ class ContentController extends AbstractController
         ContentManager $contentManager,
         Request $request
     ) {
-        $r = json_decode($request->getContent(), true);
+        $r = json_decode($request->request->get('json'), true);
+        $image = $r['image'];
+        $file = $request->files->get('file');
 
-        $imageAndId = $contentManager->createImage($r['image']);
+        $imageAndId = $contentManager->createImage($image, $file);
 
         return new JsonResponse([
             'errors' => [],
@@ -193,9 +195,10 @@ class ContentController extends AbstractController
         ContentManager $contentManager,
         Request $request
     ) {
-        $r = json_decode($request->getContent(), true);
+        $r = json_decode($request->request->get('json'), true);
+        $file = $request->files->get('file');
 
-        $image = $contentManager->updateImage($r['id'], $r['image']);
+        $image = $contentManager->updateImage($r['id'], $r['image'], $file);
 
         return new JsonResponse([
             'errors' => [],

@@ -14,6 +14,7 @@ class ContentManager
 
     private $contentDirectory;
     private $content;
+    private $imageDirectory;
     private $images;
     private $pages;
 
@@ -22,6 +23,7 @@ class ContentManager
     public function __construct(
         $configDirectory,
         $contentDirectory,
+        $imageDirectory,
         Environment $twig
     ) {
         $this->configDirectory = $configDirectory;
@@ -43,6 +45,8 @@ class ContentManager
             file_get_contents($contentDirectory . '/content.json'),
             true
         );
+
+        $this->imageDirectory = $imageDirectory;
         $this->images = json_decode(
             file_get_contents($contentDirectory . '/images.json'),
             true
@@ -197,9 +201,21 @@ class ContentManager
         return $output;
     }
 
-    public function createImage($image)
+    public function createImage($image, $file)
     {
         $id = Uuid::uuid4()->toString();
+
+        if ($file) {
+            $filename = $id . '.' . $file->guessExtension();
+
+            $file->move($this->imageDirectory, $filename);
+
+            $image['filename'] = $filename;
+            //TODO: allow config of image directory?
+            $imagePath = '/images/' . $filename;
+            $image['path'] = $imagePath;
+        }
+
         $this->images[$id] = $image;
 
         if (!isset($this->images[$id]['meta'])) {
@@ -215,12 +231,23 @@ class ContentManager
             json_encode($this->images)
         );
 
-        return ['id' => $id, 'images' => $this->images[$id]];
+        return ['id' => $id, 'image' => $this->images[$id]];
     }
 
-    public function updateImage($id, $image)
+    public function updateImage($id, $image, $file)
     {
         $this->images[$id] = $image;
+
+        if ($file) {
+            unlink(
+                $this->imageDirectory . '/' . $this->images[$id]['filename']
+            );
+            $filename = $id . '.' . $file->guessExtension();
+
+            $file->move($this->imageDirectory, $filename);
+
+            $this->images[$id]['filename'] = $filename;
+        }
 
         if (!isset($this->images[$id]['meta'])) {
             $this->images[$id]['meta'] = [];
@@ -241,6 +268,9 @@ class ContentManager
     public function deleteImage($id)
     {
         if (isset($this->images[$id])) {
+            unlink(
+                $this->imageDirectory . '/' . $this->images[$id]['filename']
+            );
             unset($this->images[$id]);
         }
 
