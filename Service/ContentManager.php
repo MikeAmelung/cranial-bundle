@@ -15,6 +15,7 @@ class ContentManager
     private $contentDirectory;
     private $content;
     private $imageDirectory;
+    private $imagePathPrefix;
     private $images;
     private $pages;
 
@@ -24,6 +25,7 @@ class ContentManager
         $configDirectory,
         $contentDirectory,
         $imageDirectory,
+        $imagePathPrefix,
         Environment $twig
     ) {
         $this->configDirectory = $configDirectory;
@@ -47,6 +49,7 @@ class ContentManager
         );
 
         $this->imageDirectory = $imageDirectory;
+        $this->imagePathPrefix = $imagePathPrefix;
         $this->images = json_decode(
             file_get_contents($contentDirectory . '/images.json'),
             true
@@ -212,7 +215,7 @@ class ContentManager
 
             $image['filename'] = $filename;
             //TODO: allow config of image directory?
-            $imagePath = '/images/' . $filename;
+            $imagePath = $this->imagePathPrefix . '/' . $filename;
             $image['path'] = $imagePath;
         }
 

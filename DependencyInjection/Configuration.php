@@ -20,6 +20,8 @@ class Configuration implements ConfigurationInterface
             ->end()
             ->scalarNode('image_directory')
             ->end()
+            ->scalarNode('image_path_prefix')
+            ->end()
             ->end();
 
         return $treeBuilder;
