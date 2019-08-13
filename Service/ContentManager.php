@@ -217,9 +217,14 @@ class ContentManager
             //TODO: allow config of image directory?
             $imagePath = $this->imagePathPrefix . '/' . $filename;
             $image['path'] = $imagePath;
+            $imageThumbnailPath =
+                $this->imagePathPrefix . '/thumbnails/' . $filename;
+            $image['thumbnailPath'] = $imageThumbnailPath;
         }
 
         $this->images[$id] = $image;
+
+        $this->generateThumbnail($id);
 
         if (!isset($this->images[$id]['meta'])) {
             $this->images[$id]['meta'] = [];
@@ -265,6 +270,8 @@ class ContentManager
             json_encode($this->images)
         );
 
+        $this->generateThumbnail($id);
+
         return $this->images[$id];
     }
 
@@ -273,6 +280,11 @@ class ContentManager
         if (isset($this->images[$id])) {
             unlink(
                 $this->imageDirectory . '/' . $this->images[$id]['filename']
+            );
+            unlink(
+                $this->imageDirectory .
+                    '/thumbnails/' .
+                    $this->images[$id]['filename']
             );
             unset($this->images[$id]);
         }
@@ -293,6 +305,74 @@ class ContentManager
     public function allImages()
     {
         return $this->images;
+    }
+
+    public function generateThumbnail($id)
+    {
+        if (!isset($this->images[$id])) {
+            return;
+        }
+
+        $filename =
+            $this->imageDirectory . '/' . $this->images[$id]['filename'];
+        $thumbnailFilename =
+            $this->imageDirectory .
+            '/thumbnails/' .
+            $this->images[$id]['filename'];
+
+        $thumb = new \Imagick($filename);
+
+        if ($thumb->getImageFormat() === 'GIF') {
+            $thumb = $thumb->coalesceImages();
+            do {
+                $this->cropAndResize($thumb);
+            } while ($thumb->nextImage());
+
+            $thumb->deconstructImages();
+            $thumb->writeImages($thumbnailFilename, true);
+        } else {
+            $this->cropAndResize($thumb);
+            $thumb->writeImage($thumbnailFilename);
+        }
+
+        $thumb->destroy();
+    }
+
+    private function cropAndResize(&$thumb)
+    {
+        $width = $thumb->getImageWidth();
+        $height = $thumb->getImageHeight();
+
+        if ($width === $height) {
+        } elseif ($width > $height) {
+            $trimStart = floor(($width - $height) / 2);
+            $thumb->cropImage($height, $height, $trimStart, 0);
+            $thumb->setImagePage($height, $height, 0, 0);
+        } else {
+            $trimStart = floor(($height - $width) / 2);
+            $thumb->cropImage($width, $width, 0, $trimStart);
+            $thumb->setImagePage($width, $width, 0, 0);
+        }
+
+        $thumb->resizeImage(200, 200, \Imagick::FILTER_LANCZOS, 1);
+    }
+
+    public function generateThumbnails()
+    {
+        foreach ($this->images as $id => $image) {
+            $this->generateThumbnail($id);
+
+            $imageThumbnailPath =
+                $this->imagePathPrefix .
+                '/thumbnails/' .
+                $this->images[$id]['filename'];
+            $this->images[$id]['thumbnailPath'] = $imageThumbnailPath;
+        }
+
+        file_put_contents(
+            $this->contentDirectory . '/images.json',
+            json_encode($this->images)
+        );
     }
 
     public function createPage($page)

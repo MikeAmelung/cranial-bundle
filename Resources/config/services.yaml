@@ -18,3 +18,7 @@ services:
             $contentDirectory: "%mike_amelung_cranial.content_directory%"
             $imageDirectory: "%mike_amelung_cranial.image_directory%"
         tags: ["console.command"]
+    MikeAmelung\CranialBundle\Command\GenerateThumbnailsCommand:
+        arguments:
+            $contentManager: '@MikeAmelung\CranialBundle\Service\ContentManager'
+        tags: ["console.command"]
