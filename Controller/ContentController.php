@@ -2,7 +2,6 @@
 
 namespace MikeAmelung\CranialBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,7 +12,7 @@ use MikeAmelung\CranialBundle\Service\ContentManager;
 /**
  * @Route("/cranial")
  */
-class ContentController extends AbstractController
+class ContentController
 {
     /**
      * @Route("/content-types", name="mikeamelung_cranial_get_types", methods={"GET"})
