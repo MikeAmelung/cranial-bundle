@@ -111,6 +111,17 @@ class ContentManager
         return $this->storage->image($id);
     }
 
+    public function imagePath($id)
+    {
+        $image = $this->storage->image($id);
+
+        if ($image && isset($image['path'])) {
+            return $image['path'];
+        }
+
+        return null;
+    }
+
     public function createImage($image, $file)
     {
         $id = $this->storage->createImage($image);
