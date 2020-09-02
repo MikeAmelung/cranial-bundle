@@ -71,7 +71,7 @@ class ContentManager
         if (!isset($content['meta'])) {
             $content['meta'] = [];
         }
-        $content[$id]['meta'][] = [
+        $content['meta'][] = [
             'label' => 'Last Updated',
             'value' => (new \DateTime())->format('m/d/Y H:i:s')
         ];

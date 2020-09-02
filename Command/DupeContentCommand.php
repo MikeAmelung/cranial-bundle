@@ -36,9 +36,9 @@ class DupeContentCommand extends Command
         $existingContent = $this->contentManager->content($input->getArgument('contentId'));
 
         if ($existingContent) {
-            $newId = $this->contentManager->createContent($existingContent);
+            $newIdAndContent = $this->contentManager->createContent($existingContent);
 
-            $output->writeln('New content ID: ' . $newId);
+            $output->writeln('New content ID: ' . $newIdAndContent['id']);
 
             return Command::SUCCESS;
         }
