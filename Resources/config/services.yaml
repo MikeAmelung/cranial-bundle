@@ -10,12 +10,17 @@ services:
         arguments:
             $configDirectory: "%mike_amelung_cranial.config_directory%"
             $contentDirectory: "%mike_amelung_cranial.content_directory%"
+            $imageProcessor: '@MikeAmelung\CranialBundle\Service\ImageProcessor'
+            $storage: "%mike_amelung_cranial.storage%"
+            $twig: "@twig"
+            $em: "@doctrine.orm.default_entity_manager"
+    MikeAmelung\CranialBundle\Service\ImageProcessor:
+        arguments:
             $imageDirectory: "%mike_amelung_cranial.image_directory%"
             $imagePathPrefix: "%mike_amelung_cranial.image_path_prefix%"
-            $twig: "@twig"
     MikeAmelung\CranialBundle\Command\ScanImagesCommand:
         arguments:
-            $contentDirectory: "%mike_amelung_cranial.content_directory%"
+            $contentManager: '@MikeAmelung\CranialBundle\Service\ContentManager'
             $imageDirectory: "%mike_amelung_cranial.image_directory%"
         tags: ["console.command"]
     MikeAmelung\CranialBundle\Command\GenerateThumbnailsCommand:

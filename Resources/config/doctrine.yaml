@@ -1,0 +1,8 @@
+doctrine:
+    dbal:
+        types:
+            uuid: Ramsey\Uuid\Doctrine\UuidType
+    orm:
+        dql:
+            string_functions:
+                JSON_EXTRACT: Scienta\DoctrineJsonFunctions\Query\AST\Functions\Mysql\JsonExtract

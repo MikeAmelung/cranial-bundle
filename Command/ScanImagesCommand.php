@@ -10,16 +10,18 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\Finder;
 
+use MikeAmelung\CranialBundle\Service\ContentManager;
+
 class ScanImagesCommand extends Command
 {
-    private $contentDirectory;
+    private $contentManager;
     private $imageDirectory;
 
     public function __construct(
-        string $contentDirectory,
+        ContentManager $contentManager,
         string $imageDirectory
     ) {
-        $this->contentDirectory = $contentDirectory;
+        $this->contentManager = $contentManager;
         $this->imageDirectory = $imageDirectory;
 
         parent::__construct();
@@ -38,17 +40,8 @@ class ScanImagesCommand extends Command
 
         $files = $finder->files()->in($this->imageDirectory);
 
-        $images = [];
-
         foreach ($files as $file) {
-            $images[Uuid::uuid4()->toString()] = [
-                'filename' => $file->getFilename()
-            ];
+            $this->contentManager->createImage([], $file);
         }
-
-        file_put_contents(
-            $this->contentDirectory . '/images.json',
-            json_encode($images)
-        );
     }
 }
