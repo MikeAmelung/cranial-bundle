@@ -18,12 +18,16 @@ services:
         arguments:
             $imageDirectory: "%mike_amelung_cranial.image_directory%"
             $imagePathPrefix: "%mike_amelung_cranial.image_path_prefix%"
-    MikeAmelung\CranialBundle\Command\ScanImagesCommand:
+    MikeAmelung\CranialBundle\Command\DupeContentCommand:
         arguments:
             $contentManager: '@MikeAmelung\CranialBundle\Service\ContentManager'
-            $imageDirectory: "%mike_amelung_cranial.image_directory%"
         tags: ["console.command"]
     MikeAmelung\CranialBundle\Command\GenerateThumbnailsCommand:
         arguments:
             $contentManager: '@MikeAmelung\CranialBundle\Service\ContentManager'
+        tags: ["console.command"]
+    MikeAmelung\CranialBundle\Command\ScanImagesCommand:
+        arguments:
+            $contentManager: '@MikeAmelung\CranialBundle\Service\ContentManager'
+            $imageDirectory: "%mike_amelung_cranial.image_directory%"
         tags: ["console.command"]

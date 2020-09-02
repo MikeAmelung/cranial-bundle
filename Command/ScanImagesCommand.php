@@ -43,5 +43,7 @@ class ScanImagesCommand extends Command
         foreach ($files as $file) {
             $this->contentManager->createImage([], $file);
         }
+
+        return Command::SUCCESS;
     }
 }
