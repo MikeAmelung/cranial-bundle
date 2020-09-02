@@ -119,7 +119,7 @@ class ContentManager
             return $image['path'];
         }
 
-        return null;
+        return '';
     }
 
     public function createImage($image, $file)
