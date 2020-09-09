@@ -16,13 +16,9 @@ class Configuration implements ConfigurationInterface
             ->children()
             ->scalarNode('config_directory')
             ->end()
-            ->scalarNode('content_directory')
-            ->end()
             ->scalarNode('image_directory')
             ->end()
             ->scalarNode('image_path_prefix')
-            ->end()
-            ->scalarNode('storage')
             ->end()
             ->end();
 

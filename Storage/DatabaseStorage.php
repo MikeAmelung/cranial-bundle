@@ -143,7 +143,10 @@ class DatabaseStorage implements StorageInterface
             ->getResult();
 
         if ($entity) {
-            return $entity->getPayload();
+            return [
+                'pageId' => $entity->getId(),
+                'page' => $entity->getPayload(),
+            ];
         }
 
         return false;

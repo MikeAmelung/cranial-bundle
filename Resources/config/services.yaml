@@ -9,11 +9,9 @@ services:
     MikeAmelung\CranialBundle\Service\ContentManager:
         arguments:
             $configDirectory: "%mike_amelung_cranial.config_directory%"
-            $contentDirectory: "%mike_amelung_cranial.content_directory%"
             $imageProcessor: '@MikeAmelung\CranialBundle\Service\ImageProcessor'
-            $storage: "%mike_amelung_cranial.storage%"
+            $storage: "@mike_amelung_cranial.storage"
             $twig: "@twig"
-            $em: "@doctrine.orm.default_entity_manager"
     MikeAmelung\CranialBundle\Service\ImageProcessor:
         arguments:
             $imageDirectory: "%mike_amelung_cranial.image_directory%"

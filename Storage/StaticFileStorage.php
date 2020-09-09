@@ -1,8 +1,8 @@
 <?php
 
-use Ramsey\Uuid\Uuid;
-
 namespace MikeAmelung\CranialBundle\Storage;
+
+use Ramsey\Uuid\Uuid;
 
 class StaticFileStorage implements StorageInterface
 {
@@ -142,11 +142,9 @@ class StaticFileStorage implements StorageInterface
         if ($this->pages) {
             foreach ($this->pages as $pageId => $page) {
                 if ($page['route'] === $route) {
-                    $pageTemplate = $this->pageTemplates[$page['templateKey']];
-
                     return [
                         'pageId' => $pageId,
-                        'templateId' => $pageTemplate['id']
+                        'page' => $page,
                     ];
                 }
             }

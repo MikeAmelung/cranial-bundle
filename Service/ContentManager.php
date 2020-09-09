@@ -6,8 +6,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Ramsey\Uuid\Uuid;
 use Twig\Environment;
 
-use MikeAmelung\CranialBundle\Storage\DatabaseStorage;
-use MikeAmelung\CranialBundle\Storage\StaticFileStorage;
+use MikeAmelung\CranialBundle\Storage\StorageInterface;
 
 class ContentManager
 {
@@ -15,20 +14,15 @@ class ContentManager
     private $types;
     private $templates;
     private $pageTemplates;
-
     private $imageProcessor;
-
     private $storage;
-
     private $twig;
 
     public function __construct(
         $configDirectory,
-        $contentDirectory,
         ImageProcessor $imageProcessor,
-        $storage,
-        Environment $twig,
-        EntityManagerInterface $em
+        StorageInterface $storage,
+        Environment $twig
     ) {
         $this->configDirectory = $configDirectory;
         $this->types = json_decode(
@@ -46,12 +40,7 @@ class ContentManager
 
         $this->imageProcessor = $imageProcessor;
 
-        if ('static_files' === $storage) {
-            $this->storage = new StaticFileStorage($contentDirectory);
-        }
-        if ('doctrine' === $storage) {
-            $this->storage = new DatabaseStorage($em);
-        }
+        $this->storage = $storage;
 
         $this->twig = $twig;
     }
@@ -189,7 +178,12 @@ class ContentManager
 
     public function pageByRoute($route)
     {
-        return $this->storage->pageByRoute($route);
+        $pageIdAndPage = $this->storage->pageByRoute($route);
+
+        return [
+            'pageId' => $pageIdAndPage['pageId'],
+            'templateId' => $this->pageTemplates[$pageIdAndPage['page']['templateKey']]['id'],
+        ];
     }
 
     public function createPage($page)

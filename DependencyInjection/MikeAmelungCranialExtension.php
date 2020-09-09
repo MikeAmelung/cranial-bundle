@@ -20,14 +20,6 @@ class MikeAmelungCranialExtension extends Extension
             $config['config_directory']
         );
         $container->setParameter(
-            'mike_amelung_cranial.storage',
-            $config['storage']
-        );
-        $container->setParameter(
-            'mike_amelung_cranial.content_directory',
-            $config['content_directory']
-        );
-        $container->setParameter(
             'mike_amelung_cranial.image_directory',
             $config['image_directory']
         );
