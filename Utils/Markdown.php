@@ -11,12 +11,12 @@ class Markdown
         $this->parser = new \Parsedown();
     }
 
-    public function toHtml(string $text): string
+    public function toHtml(?string $text): string
     {
         return $this->parser->text($text);
     }
 
-    public function toHtmlInline(string $text): string
+    public function toHtmlInline(?string $text): string
     {
         return $this->parser->line($text);
     }
