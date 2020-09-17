@@ -18,17 +18,17 @@ class ImageProcessor
         if ($file) {
             if (!isset($image['filename'])) {
                 $filename = $id . '.' . $file->guessExtension();
-
-                $file->move($this->imageDirectory, $filename);
-
                 $image['filename'] = $filename;
-                //TODO: allow config of image directory?
-                $imagePath = $this->imagePathPrefix . '/' . $filename;
-                $image['path'] = $imagePath;
-                $imageThumbnailPath =
-                    $this->imagePathPrefix . '/thumbnails/' . $filename;
-                $image['thumbnailPath'] = $imageThumbnailPath;
             }
+
+            $file->move($this->imageDirectory, $image['filename']);
+
+            //TODO: allow config of image directory?
+            $imagePath = $this->imagePathPrefix . '/' . $image['filename'];
+            $image['path'] = $imagePath;
+            $imageThumbnailPath =
+                $this->imagePathPrefix . '/thumbnails/' . $image['filename'];
+            $image['thumbnailPath'] = $imageThumbnailPath;
 
             $this->generateThumbnail($image['filename']);
         }

@@ -175,10 +175,9 @@ class ContentController
         Request $request
     ) {
         $r = json_decode($request->request->get('json'), true);
-        $image = $r['image'];
         $file = $request->files->get('file');
 
-        $imageAndId = $contentManager->createImage($image, $file);
+        $imageAndId = $contentManager->createImage($r['image'], $file);
 
         return new JsonResponse([
             'errors' => [],
