@@ -180,6 +180,10 @@ class ContentManager
     {
         $pageIdAndPage = $this->storage->pageByRoute($route);
 
+        if (!$pageIdAndPage) {
+            return false;
+        }
+
         return [
             'pageId' => $pageIdAndPage['pageId'],
             'templateId' => $this->pageTemplates[$pageIdAndPage['page']['templateKey']]['id'],

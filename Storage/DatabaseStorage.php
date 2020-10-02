@@ -140,6 +140,7 @@ class DatabaseStorage implements StorageInterface
         $entity = $this->em->getRepository(Page::class)->createQueryBuilder('p')
             ->where("JSON_EXTRACT(p.payload, '$.route') = :route")
             ->setParameter('route', $route)
+            ->getQuery()
             ->getResult();
 
         if ($entity) {
