@@ -141,7 +141,7 @@ class DatabaseStorage implements StorageInterface
             ->where("JSON_EXTRACT(p.payload, '$.route') = :route")
             ->setParameter('route', $route)
             ->getQuery()
-            ->getResult();
+            ->getOneOrNullResult();
 
         if ($entity) {
             return [
