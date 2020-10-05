@@ -200,7 +200,7 @@ class ContentManager
             'value' => (new \DateTime())->format('m/d/Y H:i:s')
         ];
 
-        $this->storage->createPage($page);
+        $id = $this->storage->createPage($page);
 
         return ['id' => $id, 'page' => $page];
     }
