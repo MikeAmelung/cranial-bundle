@@ -8,6 +8,8 @@ interface StorageInterface
 
     public function content(string $id);
 
+    public function contentByType(string $typeKey);
+
     public function createContent($content);
 
     public function updateContent(string $id, $content);

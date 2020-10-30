@@ -55,6 +55,11 @@ class ContentManager
         return $this->storage->content($id);
     }
 
+    public function contentByType($typeKey)
+    {
+        return $this->storage->contentByType($typeKey);
+    }
+
     public function createContent($content)
     {
         if (!isset($content['meta'])) {

@@ -43,6 +43,19 @@ class StaticFileStorage implements StorageInterface
         }
     }
 
+    public function contentByType($typeKey)
+    {
+        $contentByType = [];
+
+        foreach ($this->content as $id => $content) {
+            if ($content['typeKey'] === $typeKey) {
+                $contentByType[$id] = $content;
+            }
+        }
+
+        return $contentByType;
+    }
+
     public function createContent($content)
     {
         $id = Uuid::uuid4()->toString();

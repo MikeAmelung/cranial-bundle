@@ -37,6 +37,23 @@ class DatabaseStorage implements StorageInterface
         }
     }
 
+    public function contentByType($typeKey)
+    {
+        $contentByType = [];
+
+        $entities = $this->em->getRepository(Content::class)->createQueryBuilder('c')
+            ->where("JSON_EXTRACT(c.payload, '$.typeKey') = :typeKey")
+            ->setParameter('typeKey', $typeKey)
+            ->getQuery()
+            ->getResult();
+
+        foreach ($entities as $entity) {
+            $contentByType[$entity->getId()] = $entity->getPayload();
+        }
+
+        return $contentByType;
+    }
+
     public function createContent($payload)
     {
         $entity = new Content();
