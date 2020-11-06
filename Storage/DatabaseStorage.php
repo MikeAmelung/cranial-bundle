@@ -48,7 +48,7 @@ class DatabaseStorage implements StorageInterface
             ->getResult();
 
         foreach ($entities as $entity) {
-            $contentByType[$entity->getId()] = $entity->getPayload();
+            $contentByType[$entity->getId()->__toString()] = $entity->getPayload();
         }
 
         return $contentByType;
