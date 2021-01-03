@@ -34,9 +34,11 @@ class FileProcessor
 
     public function delete($file) {
         if (isset($file['filename'])) {
-            unlink(
-                $this->fileDirectory . '/' . $file['filename']
-            );
+            $path = $this->fileDirectory . '/' . $file['filename'];
+
+            if (file_exists($path)) {
+                unlink($path);
+            }
         }
     }
 }

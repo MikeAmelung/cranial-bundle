@@ -33,15 +33,21 @@ class ImageProcessor
     }
 
     public function delete($image) {
-        unlink(
-            $this->imageDirectory . '/' . $image['filename']
-        );
+        if (isset($file['filename'])) {
+            $path = $this->imageDirectory . '/' . $image['filename'];
 
-        unlink(
-            $this->imageDirectory .
+            if (file_exists($path)) {
+                unlink($path);
+            }
+
+            $thumbnailPath = $this->imageDirectory .
                 '/thumbnails/' .
-                $image['filename']
-        );
+                $image['filename'];
+
+            if (file_exists($thumbnailPath)) {
+                unlink($thumbnailPath);
+            }
+        }
     }
 
     public function generateThumbnail($filename)
