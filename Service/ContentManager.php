@@ -14,12 +14,14 @@ class ContentManager
     private $types;
     private $templates;
     private $pageTemplates;
+    private $fileProcessor;
     private $imageProcessor;
     private $storage;
     private $twig;
 
     public function __construct(
         $configDirectory,
+        FileProcessor $fileProcessor,
         ImageProcessor $imageProcessor,
         StorageInterface $storage,
         Environment $twig
@@ -38,6 +40,7 @@ class ContentManager
             true
         );
 
+        $this->fileProcessor = $fileProcessor;
         $this->imageProcessor = $imageProcessor;
 
         $this->storage = $storage;
@@ -169,6 +172,82 @@ class ContentManager
         $this->imageProcessor->delete($image);
 
         $this->storage->deleteImage($id);
+    }
+
+    public function allFiles()
+    {
+        return $this->storage->allFiles();
+    }
+
+    public function file($id)
+    {
+        return $this->storage->file($id);
+    }
+
+    public function filePath($id)
+    {
+        $file = $this->storage->file($id);
+
+        if ($file && isset($file['path'])) {
+            return $file['path'];
+        }
+
+        return '';
+    }
+
+    public function createFile($file, $uploadedFile)
+    {
+        $id = $this->storage->createFile($file);
+
+        try {
+            $processedFile = $this->fileProcessor->handleUpload($id, $file, $uploadedFile);
+        } catch (\Exception $e) {
+            $this->storage->deleteFile($id);
+
+            throw $e;
+        }
+
+        if (!isset($processedFile['meta'])) {
+            $processedFile['meta'] = [];
+        }
+        $processedFile['meta'][] = [
+            'label' => 'Last Updated',
+            'value' => (new \DateTime())->format('m/d/Y H:i:s')
+        ];
+
+        $this->storage->updateFile($id, $processedFile);
+
+        return ['id' => $id, 'file' => $processedFile];
+    }
+
+    public function updateFile($id, $file, $uploadedFile)
+    {
+        try {
+            $processedFile = $this->fileProcessor->handleUpload($id, $file, $uploadedFile);
+        } catch (\Exception $e) {
+            throw $e;
+        }
+
+        if (!isset($processedFile['meta'])) {
+            $processedFile['meta'] = [];
+        }
+        $processedFile['meta'][] = [
+            'label' => 'Last Updated',
+            'value' => (new \DateTime())->format('m/d/Y H:i:s')
+        ];
+
+        $this->storage->updateFile($id, $processedFile);
+
+        return $processedFile;
+    }
+
+    public function deleteFile($id)
+    {
+        $file = $this->storage->file($id);
+
+        $this->fileProcessor->delete($file);
+
+        $this->storage->deleteFile($id);
     }
 
     public function allPages()

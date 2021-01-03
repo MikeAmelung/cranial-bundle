@@ -142,6 +142,92 @@ class ContentController
     }
 
     /**
+     * @Route("/all-files", name="mikeamelung_cranial_all_files", methods={"GET"})
+     */
+    public function allFiles(ContentManager $contentManager, Request $request)
+    {
+        $files = $contentManager->allFiles();
+
+        return new JsonResponse([
+            'errors' => [],
+            'files' => $files
+        ]);
+    }
+
+    /**
+     * @Route("/file/{id}", name="mikeamelung_cranial_get_file", methods={"GET"})
+     */
+    public function file(ContentManager $contentManager, Request $request, $id)
+    {
+        $file = $contentManager->file($id);
+
+        return new JsonResponse([
+            'errors' => [],
+            'file' => $file
+        ]);
+    }
+
+    /**
+     * @Route("/file/create", name="mikeamelung_cranial_create_file", methods={"POST"})
+     */
+    public function createFile(
+        ContentManager $contentManager,
+        Request $request
+    ) {
+        $r = json_decode($request->request->get('json'), true);
+        $uploadedFile = $request->files->get('file');
+
+        try {
+            $fileAndId = $contentManager->createFile($r['file'], $uploadedFile);
+        } catch (\Exception $e) {
+            return new JsonResponse([
+                'errors' => [$e->getMessage()],
+                'id' => null,
+                'file' => null,
+            ]);
+        }
+
+        return new JsonResponse([
+            'errors' => [],
+            'id' => $fileAndId['id'],
+            'file' => $fileAndId['file']
+        ]);
+    }
+
+    /**
+     * @Route("/file/update", name="mikeamelung_cranial_update_file", methods={"POST"})
+     */
+    public function updateFile(
+        ContentManager $contentManager,
+        Request $request
+    ) {
+        $r = json_decode($request->request->get('json'), true);
+        $uploadedFile = $request->files->get('file');
+
+        $file = $contentManager->updateFile($r['id'], $r['file'], $uploadedFile);
+
+        return new JsonResponse([
+            'errors' => [],
+            'file' => $file
+        ]);
+    }
+
+    /**
+     * @Route("/file/{id}", name="mikeamelung_cranial_delete_file", methods={"DELETE"})
+     */
+    public function deleteFile(
+        ContentManager $contentManager,
+        Request $request,
+        $id
+    ) {
+        $contentManager->deleteFile($id);
+
+        return new JsonResponse([
+            'errors' => []
+        ]);
+    }
+
+    /**
      * @Route("/all-images", name="mikeamelung_cranial_all_images", methods={"GET"})
      */
     public function allImages(ContentManager $contentManager, Request $request)

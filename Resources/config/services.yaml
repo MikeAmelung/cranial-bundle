@@ -9,9 +9,14 @@ services:
     MikeAmelung\CranialBundle\Service\ContentManager:
         arguments:
             $configDirectory: "%mike_amelung_cranial.config_directory%"
+            $fileProcessor: '@MikeAmelung\CranialBundle\Service\FileProcessor'
             $imageProcessor: '@MikeAmelung\CranialBundle\Service\ImageProcessor'
             $storage: "@mike_amelung_cranial.storage"
             $twig: "@twig"
+    MikeAmelung\CranialBundle\Service\FileProcessor:
+        arguments:
+            $fileDirectory: "%mike_amelung_cranial.file_directory%"
+            $filePathPrefix: "%mike_amelung_cranial.file_path_prefix%"
     MikeAmelung\CranialBundle\Service\ImageProcessor:
         arguments:
             $imageDirectory: "%mike_amelung_cranial.image_directory%"

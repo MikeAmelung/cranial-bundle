@@ -23,12 +23,8 @@ class ImageProcessor
 
             $file->move($this->imageDirectory, $image['filename']);
 
-            //TODO: allow config of image directory?
-            $imagePath = $this->imagePathPrefix . '/' . $image['filename'];
-            $image['path'] = $imagePath;
-            $imageThumbnailPath =
-                $this->imagePathPrefix . '/thumbnails/' . $image['filename'];
-            $image['thumbnailPath'] = $imageThumbnailPath;
+            $image['path'] = $this->imagePathPrefix . '/' . $image['filename'];
+            $image['thumbnailPath'] = $this->imagePathPrefix . '/thumbnails/' . $image['filename'];
 
             $this->generateThumbnail($image['filename']);
         }

@@ -3,6 +3,7 @@
 namespace MikeAmelung\CranialBundle\Storage;
 
 use MikeAmelung\CranialBundle\Entity\Content;
+use MikeAmelung\CranialBundle\Entity\File;
 use MikeAmelung\CranialBundle\Entity\Image;
 use MikeAmelung\CranialBundle\Entity\Page;
 
@@ -125,6 +126,55 @@ class DatabaseStorage implements StorageInterface
     public function deleteImage($id)
     {
         $entity = $this->em->getRepository(Image::class)->find($id);
+
+        $this->em->remove($entity);
+        $this->em->flush();
+    }
+
+    public function allFiles()
+    {
+        $entities = $this->em->getRepository(File::class)->findAll();
+
+        $all = [];
+
+        foreach ($entities as $entity) {
+            $all[(string) $entity->getId()] = $entity->getPayload();
+        }
+
+        return $all;
+    }
+
+    public function file($id)
+    {
+        $entity = $this->em->getRepository(File::class)->find($id);
+
+        if ($entity) {
+            return $entity->getPayload();
+        }
+    }
+
+    public function createFile($payload)
+    {
+        $entity = new File();
+        $entity->setPayload($payload);
+
+        $this->em->persist($entity);
+        $this->em->flush();
+
+        return (string) $entity->getId();
+    }
+
+    public function updateFile($id, $payload)
+    {
+        $entity = $this->em->getRepository(File::class)->find($id);
+        $entity->setPayload($payload);
+
+        $this->em->flush();
+    }
+
+    public function deleteFile($id)
+    {
+        $entity = $this->em->getRepository(File::class)->find($id);
 
         $this->em->remove($entity);
         $this->em->flush();

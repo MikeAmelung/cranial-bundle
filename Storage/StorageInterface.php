@@ -26,6 +26,16 @@ interface StorageInterface
 
     public function deleteImage(string $id);
 
+    public function allFiles();
+
+    public function file(string $id);
+
+    public function createFile($file);
+
+    public function updateFile(string $id, $file);
+
+    public function deleteFile(string $id);
+
     public function allPages();
 
     public function page(string $id);

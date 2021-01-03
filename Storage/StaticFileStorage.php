@@ -8,8 +8,9 @@ class StaticFileStorage implements StorageInterface
 {
     private $contentDirectory;
     private $content;
-    private $pages;
+    private $files;
     private $images;
+    private $pages;
 
     public function __construct($contentDirectory)
     {
@@ -17,6 +18,11 @@ class StaticFileStorage implements StorageInterface
 
         $this->content = json_decode(
             file_get_contents($contentDirectory . '/content.json'),
+            true
+        );
+
+        $this->files = json_decode(
+            file_get_contents($contentDirectory . '/files.json'),
             true
         );
 
@@ -137,6 +143,54 @@ class StaticFileStorage implements StorageInterface
         file_put_contents(
             $this->contentDirectory . '/images.json',
             json_encode($this->images)
+        );
+    }
+
+    public function allFiles()
+    {
+        return $this->files;
+    }
+
+    public function file($id)
+    {
+        if (isset($this->files[$id])) {
+            return $this->files[$id];
+        }
+    }
+
+    public function createFile($file)
+    {
+        $id = Uuid::uuid4()->toString();
+
+        $this->files[$id] = $file;
+
+        file_put_contents(
+            $this->contentDirectory . '/files.json',
+            json_encode($this->files)
+        );
+
+        return $id;
+    }
+
+    public function updateFile($id, $file)
+    {
+        $this->files[$id] = $file;
+
+        file_put_contents(
+            $this->contentDirectory . '/files.json',
+            json_encode($this->files)
+        );
+    }
+
+    public function deleteFile($id)
+    {
+        if (isset($this->files[$id])) {
+            unset($this->files[$id]);
+        }
+
+        file_put_contents(
+            $this->contentDirectory . '/files.json',
+            json_encode($this->files)
         );
     }
 
