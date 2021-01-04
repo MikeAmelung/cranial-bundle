@@ -16,10 +16,15 @@ class ImageProcessor
     public function handleUpload($id, $image, $file)
     {
         if ($file) {
-            if (!isset($image['filename'])) {
-                $filename = $id . '.' . $file->guessExtension();
-                $image['filename'] = $filename;
+            if ($file->getError()) {
+                throw new \Exception('There was a problem uploading the image.');
             }
+
+            if (isset($image['filename'])) {
+                $this->unlink($image['filename']);
+            }
+
+            $image['filename'] = $id . '.' . $file->guessExtension();
 
             $file->move($this->imageDirectory, $image['filename']);
 
@@ -32,21 +37,26 @@ class ImageProcessor
         return $image;
     }
 
-    public function delete($image) {
-        if (isset($file['filename'])) {
-            $path = $this->imageDirectory . '/' . $image['filename'];
+    public function delete($image)
+    {
+        if (isset($image['filename'])) {
+            $this->unlink($image['filename']);
+        }
+    }
 
-            if (file_exists($path)) {
-                unlink($path);
-            }
+    private function unlink($filename) {
+        $path = $this->imageDirectory . '/' . $filename;
 
-            $thumbnailPath = $this->imageDirectory .
-                '/thumbnails/' .
-                $image['filename'];
+        if (file_exists($path)) {
+            unlink($path);
+        }
 
-            if (file_exists($thumbnailPath)) {
-                unlink($thumbnailPath);
-            }
+        $thumbnailPath = $this->imageDirectory .
+            '/thumbnails/' .
+            $filename;
+
+        if (file_exists($thumbnailPath)) {
+            unlink($thumbnailPath);
         }
     }
 

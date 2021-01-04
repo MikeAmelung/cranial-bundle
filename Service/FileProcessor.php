@@ -20,9 +20,11 @@ class FileProcessor
                 throw new \Exception('There was a problem uploading the file.');
             }
 
-            if (!isset($file['filename'])) {
-                $file['filename'] = $id . '.' . $uploadedFile->guessExtension();
+            if (isset($file['filename'])) {
+                $this->unlink($file['filename']);
             }
+
+            $file['filename'] = $uploadedFile->getClientOriginalName();
 
             $uploadedFile->move($this->fileDirectory, $file['filename']);
 
@@ -32,13 +34,19 @@ class FileProcessor
         return $file;
     }
 
-    public function delete($file) {
+    public function delete($file)
+    {
         if (isset($file['filename'])) {
-            $path = $this->fileDirectory . '/' . $file['filename'];
+            $this->unlink($file['filename']);
+        }
+    }
 
-            if (file_exists($path)) {
-                unlink($path);
-            }
+    private function unlink($filename)
+    {
+        $path = $this->fileDirectory . '/' . $filename;
+
+        if (file_exists($path)) {
+            unlink($path);
         }
     }
 }
