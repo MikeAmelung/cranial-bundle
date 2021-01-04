@@ -20,7 +20,7 @@ class ImageProcessor
                 throw new \Exception('There was a problem uploading the image.');
             }
 
-            if (isset($image['filename'])) {
+            if (isset($image['filename']) && $image['filename']) {
                 $this->unlink($image['filename']);
             }
 
@@ -39,7 +39,7 @@ class ImageProcessor
 
     public function delete($image)
     {
-        if (isset($image['filename'])) {
+        if (isset($image['filename']) && $image['filename']) {
             $this->unlink($image['filename']);
         }
     }

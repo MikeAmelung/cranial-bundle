@@ -20,7 +20,7 @@ class FileProcessor
                 throw new \Exception('There was a problem uploading the file.');
             }
 
-            if (isset($file['filename'])) {
+            if (isset($file['filename']) && $file['filename']) {
                 $this->unlink($file['filename']);
             }
 
@@ -36,7 +36,7 @@ class FileProcessor
 
     public function delete($file)
     {
-        if (isset($file['filename'])) {
+        if (isset($file['filename']) && $file['filename']) {
             $this->unlink($file['filename']);
         }
     }
