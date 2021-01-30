@@ -16,14 +16,6 @@ class Configuration implements ConfigurationInterface
             ->children()
             ->scalarNode('config_directory')
             ->end()
-            ->scalarNode('file_directory')
-            ->end()
-            ->scalarNode('file_path_prefix')
-            ->end()
-            ->scalarNode('image_directory')
-            ->end()
-            ->scalarNode('image_path_prefix')
-            ->end()
             ->end();
 
         return $treeBuilder;

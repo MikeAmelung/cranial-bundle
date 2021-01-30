@@ -10,19 +10,20 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\Finder;
 
-use MikeAmelung\CranialBundle\Service\ContentManager;
+use MikeAmelung\CranialBundle\ContentManager\ContentManager;
+use MikeAmelung\CranialBundle\ImageProcessor\ImageProcessorInterface;
 
 class ScanImagesCommand extends Command
 {
     private $contentManager;
-    private $imageDirectory;
+    private $imageProcessor;
 
     public function __construct(
         ContentManager $contentManager,
-        string $imageDirectory
+        ImageProcessorInterface $imageProcessor
     ) {
         $this->contentManager = $contentManager;
-        $this->imageDirectory = $imageDirectory;
+        $this->imageProcessor = $imageProcessor;
 
         parent::__construct();
     }
@@ -36,6 +37,9 @@ class ScanImagesCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        /*
+        TODO: Move this into each image processor
+
         $finder = new Finder();
 
         $files = $finder->files()->in($this->imageDirectory);
@@ -43,6 +47,7 @@ class ScanImagesCommand extends Command
         foreach ($files as $file) {
             $this->contentManager->createImage([], $file);
         }
+        */
 
         return Command::SUCCESS;
     }

@@ -19,22 +19,6 @@ class MikeAmelungCranialExtension extends Extension
             'mike_amelung_cranial.config_directory',
             $config['config_directory']
         );
-        $container->setParameter(
-            'mike_amelung_cranial.file_directory',
-            $config['file_directory']
-        );
-        $container->setParameter(
-            'mike_amelung_cranial.file_path_prefix',
-            $config['file_path_prefix']
-        );
-        $container->setParameter(
-            'mike_amelung_cranial.image_directory',
-            $config['image_directory']
-        );
-        $container->setParameter(
-            'mike_amelung_cranial.image_path_prefix',
-            $config['image_path_prefix']
-        );
 
         $loader = new YamlFileLoader(
             $container,

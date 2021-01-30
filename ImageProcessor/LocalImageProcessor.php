@@ -1,8 +1,8 @@
 <?php
 
-namespace MikeAmelung\CranialBundle\Service;
+namespace MikeAmelung\CranialBundle\ImageProcessor;
 
-class ImageProcessor
+class LocalImageProcessor implements ImageProcessorInterface
 {
     private $imageDirectory;
     private $imagePathPrefix;

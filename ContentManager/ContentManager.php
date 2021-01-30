@@ -1,11 +1,13 @@
 <?php
 
-namespace MikeAmelung\CranialBundle\Service;
+namespace MikeAmelung\CranialBundle\ContentManager;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Ramsey\Uuid\Uuid;
 use Twig\Environment;
 
+use MikeAmelung\CranialBundle\FileProcessor\FileProcessorInterface;
+use MikeAmelung\CranialBundle\ImageProcessor\ImageProcessorInterface;
 use MikeAmelung\CranialBundle\Storage\StorageInterface;
 
 class ContentManager
@@ -21,8 +23,8 @@ class ContentManager
 
     public function __construct(
         $configDirectory,
-        FileProcessor $fileProcessor,
-        ImageProcessor $imageProcessor,
+        FileProcessorInterface $fileProcessor,
+        ImageProcessorInterface $imageProcessor,
         StorageInterface $storage,
         Environment $twig
     ) {

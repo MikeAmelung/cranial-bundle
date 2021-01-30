@@ -6,31 +6,23 @@ services:
     MikeAmelung\CranialBundle\Twig\CranialExtension:
         arguments: ['@MikeAmelung\CranialBundle\Utils\Markdown']
         tags: ["twig.extension"]
-    MikeAmelung\CranialBundle\Service\ContentManager:
+    MikeAmelung\CranialBundle\ContentManager\ContentManager:
         arguments:
             $configDirectory: "%mike_amelung_cranial.config_directory%"
-            $fileProcessor: '@MikeAmelung\CranialBundle\Service\FileProcessor'
-            $imageProcessor: '@MikeAmelung\CranialBundle\Service\ImageProcessor'
+            $fileProcessor: "@mike_amelung_cranial.file_processor"
+            $imageProcessor: "@mike_amelung_cranial.image_processor"
             $storage: "@mike_amelung_cranial.storage"
             $twig: "@twig"
-    MikeAmelung\CranialBundle\Service\FileProcessor:
-        arguments:
-            $fileDirectory: "%mike_amelung_cranial.file_directory%"
-            $filePathPrefix: "%mike_amelung_cranial.file_path_prefix%"
-    MikeAmelung\CranialBundle\Service\ImageProcessor:
-        arguments:
-            $imageDirectory: "%mike_amelung_cranial.image_directory%"
-            $imagePathPrefix: "%mike_amelung_cranial.image_path_prefix%"
     MikeAmelung\CranialBundle\Command\DupeContentCommand:
         arguments:
-            $contentManager: '@MikeAmelung\CranialBundle\Service\ContentManager'
+            $contentManager: '@MikeAmelung\CranialBundle\ContentManager\ContentManager'
         tags: ["console.command"]
     MikeAmelung\CranialBundle\Command\GenerateThumbnailsCommand:
         arguments:
-            $contentManager: '@MikeAmelung\CranialBundle\Service\ContentManager'
+            $contentManager: '@MikeAmelung\CranialBundle\ContentManager\ContentManager'
         tags: ["console.command"]
     MikeAmelung\CranialBundle\Command\ScanImagesCommand:
         arguments:
-            $contentManager: '@MikeAmelung\CranialBundle\Service\ContentManager'
-            $imageDirectory: "%mike_amelung_cranial.image_directory%"
+            $contentManager: '@MikeAmelung\CranialBundle\ContentManager\ContentManager'
+            $imageProcessor: "@mike_amelung_cranial.image_processor"
         tags: ["console.command"]

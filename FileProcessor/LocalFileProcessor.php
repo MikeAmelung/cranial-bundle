@@ -1,8 +1,8 @@
 <?php
 
-namespace MikeAmelung\CranialBundle\Service;
+namespace MikeAmelung\CranialBundle\FileProcessor;
 
-class FileProcessor
+class LocalFileProcessor implements FileProcessorInterface
 {
     private $fileDirectory;
     private $filePathPrefix;
