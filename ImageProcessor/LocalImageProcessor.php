@@ -5,12 +5,12 @@ namespace MikeAmelung\CranialBundle\ImageProcessor;
 class LocalImageProcessor implements ImageProcessorInterface
 {
     private $imageDirectory;
-    private $imagePathPrefix;
+    private $imageUrlPrefix;
 
-    public function __construct($imageDirectory, $imagePathPrefix)
+    public function __construct($imageDirectory, $imageUrlPrefix)
     {
         $this->imageDirectory = $imageDirectory;
-        $this->imagePathPrefix = $imagePathPrefix;
+        $this->imageUrlPrefix = $imageUrlPrefix;
     }
 
     public function handleUpload($id, $image, $file)
@@ -28,8 +28,8 @@ class LocalImageProcessor implements ImageProcessorInterface
 
             $file->move($this->imageDirectory, $image['filename']);
 
-            $image['path'] = $this->imagePathPrefix . '/' . $image['filename'];
-            $image['thumbnailPath'] = $this->imagePathPrefix . '/thumbnails/' . $image['filename'];
+            $image['path'] = $this->imageUrlPrefix . '/' . $image['filename'];
+            $image['thumbnailPath'] = $this->imageUrlPrefix . '/thumbnails/' . $image['filename'];
 
             $this->generateThumbnail($image['filename']);
         }

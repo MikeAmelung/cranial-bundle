@@ -5,12 +5,12 @@ namespace MikeAmelung\CranialBundle\FileProcessor;
 class LocalFileProcessor implements FileProcessorInterface
 {
     private $fileDirectory;
-    private $filePathPrefix;
+    private $fileUrlPrefix;
 
-    public function __construct($fileDirectory, $filePathPrefix)
+    public function __construct($fileDirectory, $fileUrlPrefix)
     {
         $this->fileDirectory = $fileDirectory;
-        $this->filePathPrefix = $filePathPrefix;
+        $this->fileUrlPrefix = $fileUrlPrefix;
     }
 
     public function handleUpload($id, $file, $uploadedFile)
@@ -28,7 +28,7 @@ class LocalFileProcessor implements FileProcessorInterface
 
             $uploadedFile->move($this->fileDirectory, $file['filename']);
 
-            $file['path'] = $this->filePathPrefix . '/' . $file['filename'];
+            $file['path'] = $this->fileUrlPrefix . '/' . $file['filename'];
         }
 
         return $file;
