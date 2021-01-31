@@ -2,15 +2,30 @@
 
 namespace MikeAmelung\CranialBundle\ImageProcessor;
 
-class LocalImageProcessor implements ImageProcessorInterface
+use Aws\S3\S3Client;
+
+class S3ImageProcessor implements ImageProcessorInterface
 {
     private $imageDirectory;
-    private $imagePathPrefix;
+    private $imageUrlPrefix;
+    private $s3Bucket;
+    private $s3Client;
 
-    public function __construct($imageDirectory, $imagePathPrefix)
+    public function __construct($imageDirectory, $imageUrlPrefix, $s3Bucket, $s3Key, $s3Region, $s3Secret)
     {
         $this->imageDirectory = $imageDirectory;
-        $this->imagePathPrefix = $imagePathPrefix;
+        $this->imageUrlPrefix = $imageUrlPrefix;
+
+        $this->s3Bucket = $s3Bucket;
+
+        $this->s3Client = new S3Client([
+            'region' => $s3Region,
+            'version' => '2006-03-01',
+            'credentials' => [
+                'key' => $s3Key,
+                'secret' => $s3Secret,
+            ],
+        ]);
     }
 
     public function handleUpload($id, $image, $file)
@@ -21,15 +36,19 @@ class LocalImageProcessor implements ImageProcessorInterface
             }
 
             if (isset($image['filename']) && $image['filename']) {
-                $this->unlink($image['filename']);
             }
 
             $image['filename'] = $id . '.' . $file->guessExtension();
 
-            $file->move($this->imageDirectory, $image['filename']);
+            $this->s3Client->putObject([
+                'Bucket' => $this->s3Bucket,
+                'Key' => $this->imageDirectory . '/' . $image['filename'],
+                'SourceFile' => $file->getRealPath(),
+                'ContentType' => $file->getMimeType(),
+            ]);
 
-            $image['path'] = $this->imagePathPrefix . '/' . $image['filename'];
-            $image['thumbnailPath'] = $this->imagePathPrefix . '/thumbnails/' . $image['filename'];
+            $image['path'] = $this->imageUrlPrefix . '/' . $image['filename'];
+            $image['thumbnailPath'] = $this->imageUrlPrefix . '/thumbnails/' . $image['filename'];
 
             $this->generateThumbnail($image['filename']);
         }
@@ -46,18 +65,18 @@ class LocalImageProcessor implements ImageProcessorInterface
 
     private function unlink($filename) {
         $path = $this->imageDirectory . '/' . $filename;
-
-        if (file_exists($path)) {
-            unlink($path);
-        }
-
         $thumbnailPath = $this->imageDirectory .
             '/thumbnails/' .
             $filename;
 
-        if (file_exists($thumbnailPath)) {
-            unlink($thumbnailPath);
-        }
+        $this->s3Client->deleteObject([
+            'Bucket' => $this->s3Bucket,
+            'Key' => $path,
+        ]);
+        $this->s3Client->deleteObject([
+            'Bucket' => $this->s3Bucket,
+            'Key' => $thumbnailPath,
+        ]);
     }
 
     public function generateThumbnail($filename)
@@ -69,7 +88,11 @@ class LocalImageProcessor implements ImageProcessorInterface
             '/thumbnails/' .
             $filename;
 
-        $thumb = new \Imagick($originalFilePath);
+        $thumb = new \Imagick();
+        $thumb->readImageBlob($this->s3Client->getObject([
+            'Bucket' => $this->s3Bucket,
+            'Key' => $originalFilePath,
+        ])['Body']);
 
         if ($thumb->getImageFormat() === 'GIF') {
             $thumb = $thumb->coalesceImages();
@@ -78,11 +101,16 @@ class LocalImageProcessor implements ImageProcessorInterface
             } while ($thumb->nextImage());
 
             $thumb->deconstructImages();
-            $thumb->writeImages($thumbnailFilePath, true);
         } else {
             $this->cropAndResize($thumb);
-            $thumb->writeImage($thumbnailFilePath);
         }
+
+        $this->s3Client->putObject([
+            'Bucket' => $this->s3Bucket,
+            'Key' => $thumbnailFilePath,
+            'Body' => $thumb->getImageBlob(),
+            'ContentType' => $thumb->getImageMimeType(),
+        ]);
 
         $thumb->destroy();
     }
