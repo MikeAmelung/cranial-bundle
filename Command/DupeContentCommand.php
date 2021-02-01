@@ -8,7 +8,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-use MikeAmelung\CranialBundle\Service\ContentManager;
+use MikeAmelung\CranialBundle\ContentManager\ContentManager;
 
 class DupeContentCommand extends Command
 {
