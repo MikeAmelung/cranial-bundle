@@ -361,7 +361,6 @@ class ContentManager
 
     private function createEvent($objectType, $object)
     {
-        /*
         if (!isset($object['meta'])) {
             $object['meta'] = [];
         }
@@ -370,14 +369,12 @@ class ContentManager
             'label' => 'Last Updated',
             'value' => (new \DateTime())->format('m/d/Y H:i:s')
         ];
-        */
 
         return $object;
     }
 
     private function updateEvent($objectType, $object)
     {
-        /*
         if (!isset($object['meta'])) {
             $object['meta'] = [];
         }
@@ -386,7 +383,6 @@ class ContentManager
             'label' => 'Last Updated',
             'value' => (new \DateTime())->format('m/d/Y H:i:s')
         ];
-        */
 
         return $object;
     }
