@@ -67,13 +67,7 @@ class ContentManager
 
     public function createContent($content)
     {
-        if (!isset($content['meta'])) {
-            $content['meta'] = [];
-        }
-        $content['meta'][] = [
-            'label' => 'Last Updated',
-            'value' => (new \DateTime())->format('m/d/Y H:i:s')
-        ];
+        $content = $this->createEvent('content', $content);
 
         $id = $this->storage->createContent($content);
 
@@ -82,13 +76,7 @@ class ContentManager
 
     public function updateContent($id, $content)
     {
-        if (!isset($content['meta'])) {
-            $content['meta'] = [];
-        }
-        $content['meta'][] = [
-            'label' => 'Last Updated',
-            'value' => (new \DateTime())->format('m/d/Y H:i:s')
-        ];
+        $content = $this->updateEvent('content', $content);
 
         $this->storage->updateContent($id, $content);
 
@@ -133,13 +121,7 @@ class ContentManager
             throw $e;
         }
 
-        if (!isset($processedImage['meta'])) {
-            $processedImage['meta'] = [];
-        }
-        $processedImage['meta'][] = [
-            'label' => 'Last Updated',
-            'value' => (new \DateTime())->format('m/d/Y H:i:s')
-        ];
+        $processedImage = $this->createEvent('image', $processedImage);
 
         $this->storage->updateImage($id, $processedImage);
 
@@ -154,13 +136,7 @@ class ContentManager
             throw $e;
         }
 
-        if (!isset($processedImage['meta'])) {
-            $processedImage['meta'] = [];
-        }
-        $processedImage['meta'][] = [
-            'label' => 'Last Updated',
-            'value' => (new \DateTime())->format('m/d/Y H:i:s')
-        ];
+        $processedImage = $this->updateEvent('image', $processedImage);
 
         $this->storage->updateImage($id, $processedImage);
 
@@ -209,13 +185,7 @@ class ContentManager
             throw $e;
         }
 
-        if (!isset($processedFile['meta'])) {
-            $processedFile['meta'] = [];
-        }
-        $processedFile['meta'][] = [
-            'label' => 'Last Updated',
-            'value' => (new \DateTime())->format('m/d/Y H:i:s')
-        ];
+        $processedFile = $this->createEvent('file', $processedFile);
 
         $this->storage->updateFile($id, $processedFile);
 
@@ -230,13 +200,7 @@ class ContentManager
             throw $e;
         }
 
-        if (!isset($processedFile['meta'])) {
-            $processedFile['meta'] = [];
-        }
-        $processedFile['meta'][] = [
-            'label' => 'Last Updated',
-            'value' => (new \DateTime())->format('m/d/Y H:i:s')
-        ];
+        $processedFile = $this->updateEvent('file', $processedFile);
 
         $this->storage->updateFile($id, $processedFile);
 
@@ -278,13 +242,7 @@ class ContentManager
 
     public function createPage($page)
     {
-        if (!isset($page['meta'])) {
-            $page['meta'] = [];
-        }
-        $page['meta'][] = [
-            'label' => 'Last Updated',
-            'value' => (new \DateTime())->format('m/d/Y H:i:s')
-        ];
+        $page = $this->createEvent('page', $page);
 
         $id = $this->storage->createPage($page);
 
@@ -293,13 +251,7 @@ class ContentManager
 
     public function updatePage($id, $page)
     {
-        if (!isset($page['meta'])) {
-            $page['meta'] = [];
-        }
-        $page['meta'][] = [
-            'label' => 'Last Updated',
-            'value' => (new \DateTime())->format('m/d/Y H:i:s')
-        ];
+        $page = $this->updateEvent('page', $page);
 
         $this->storage->updatePage($id, $page);
 
@@ -405,5 +357,37 @@ class ContentManager
         }
 
         return $output;
+    }
+
+    private function createEvent($objectType, $object)
+    {
+        /*
+        if (!isset($object['meta'])) {
+            $object['meta'] = [];
+        }
+
+        $object['meta']['last_updated'] = [
+            'label' => 'Last Updated',
+            'value' => (new \DateTime())->format('m/d/Y H:i:s')
+        ];
+        */
+
+        return $object;
+    }
+
+    private function updateEvent($objectType, $object)
+    {
+        /*
+        if (!isset($object['meta'])) {
+            $object['meta'] = [];
+        }
+
+        $object['meta']['last_updated'] = [
+            'label' => 'Last Updated',
+            'value' => (new \DateTime())->format('m/d/Y H:i:s')
+        ];
+        */
+
+        return $object;
     }
 }
