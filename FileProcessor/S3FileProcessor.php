@@ -49,7 +49,7 @@ class S3FileProcessor implements FileProcessorInterface
                 'ACL' => 'public-read',
             ]);
 
-            $file['path'] = $this->fileUrlPrefix . '/' . $file['filename'];
+            $file['path'] = urlencode($this->fileUrlPrefix . '/' . $file['filename']);
         }
 
         return $file;

@@ -28,8 +28,8 @@ class LocalImageProcessor implements ImageProcessorInterface
 
             $file->move($this->imageDirectory, $image['filename']);
 
-            $image['path'] = $this->imageUrlPrefix . '/' . $image['filename'];
-            $image['thumbnailPath'] = $this->imageUrlPrefix . '/thumbnails/' . $image['filename'];
+            $image['path'] = urlencode($this->imageUrlPrefix . '/' . $image['filename']);
+            $image['thumbnailPath'] = urlencode($this->imageUrlPrefix . '/thumbnails/' . $image['filename']);
 
             $this->generateThumbnail($image['filename']);
         }
