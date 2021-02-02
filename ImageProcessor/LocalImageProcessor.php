@@ -2,8 +2,6 @@
 
 namespace MikeAmelung\CranialBundle\ImageProcessor;
 
-use MikeAmelung\CranialBundle\Utils\UrlHelper;
-
 class LocalImageProcessor implements ImageProcessorInterface
 {
     private $imageDirectory;
@@ -30,8 +28,8 @@ class LocalImageProcessor implements ImageProcessorInterface
 
             $file->move($this->imageDirectory, $image['filename']);
 
-            $image['path'] = UrlHelper::urlEncode($this->imageUrlPrefix . '/' . $image['filename']);
-            $image['thumbnailPath'] = UrlHelper::urlEncode($this->imageUrlPrefix . '/thumbnails/' . $image['filename']);
+            $image['path'] = $this->imageUrlPrefix . '/' . $image['filename'];
+            $image['thumbnailPath'] = $this->imageUrlPrefix . '/thumbnails/' . $image['filename'];
 
             $this->generateThumbnail($image['filename']);
         }

@@ -8,7 +8,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use MikeAmelung\CranialBundle\ContentManager\ContentManager;
-use MikeAmelung\CranialBundle\Utils\UrlHelper;
 
 class ResetPathsCommand extends Command
 {
@@ -38,7 +37,7 @@ class ResetPathsCommand extends Command
             $files = $this->contentManager->allFiles();
 
             foreach ($files as $id => $file) {
-                $file['path'] = UrlHelper::urlEncode($input->getArgument('prefix') . '/' . $file['filename']);
+                $file['path'] = $input->getArgument('prefix') . '/' . rawurlencode($file['filename']);
                 $this->contentManager->skipEvents()->updateFile($id, $file, null);
             }
 
@@ -49,8 +48,8 @@ class ResetPathsCommand extends Command
             $images = $this->contentManager->allImages();
 
             foreach ($images as $id => $image) {
-                $image['path'] = UrlHelper::urlEncode($input->getArgument('prefix') . '/' . $image['filename']);
-                $image['thumbnailPath'] = UrlHelper::urlEncode($input->getArgument('prefix') . '/thumbnails/' . $image['filename']);
+                $image['path'] = $input->getArgument('prefix') . '/' . $image['filename'];
+                $image['thumbnailPath'] = $input->getArgument('prefix') . '/thumbnails/' . $image['filename'];
                 $this->contentManager->skipEvents()->updateImage($id, $image, null);
             }
 

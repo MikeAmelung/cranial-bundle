@@ -2,8 +2,6 @@
 
 namespace MikeAmelung\CranialBundle\ImageProcessor;
 
-use MikeAmelung\CranialBundle\Utils\UrlHelper;
-
 use Aws\S3\S3Client;
 
 class S3ImageProcessor implements ImageProcessorInterface
@@ -50,8 +48,8 @@ class S3ImageProcessor implements ImageProcessorInterface
                 'ACL' => 'public-read',
             ]);
 
-            $image['path'] = UrlHelper::urlEncode($this->imageUrlPrefix . '/' . $image['filename']);
-            $image['thumbnailPath'] = UrlHelper::urlEncode($this->imageUrlPrefix . '/thumbnails/' . $image['filename']);
+            $image['path'] = $this->imageUrlPrefix . '/' . $image['filename'];
+            $image['thumbnailPath'] = $this->imageUrlPrefix . '/thumbnails/' . $image['filename'];
 
             $this->generateThumbnail($image['filename']);
         }

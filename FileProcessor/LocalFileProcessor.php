@@ -2,8 +2,6 @@
 
 namespace MikeAmelung\CranialBundle\FileProcessor;
 
-use MikeAmelung\CranialBundle\Utils\UrlHelper;
-
 class LocalFileProcessor implements FileProcessorInterface
 {
     private $fileDirectory;
@@ -30,7 +28,7 @@ class LocalFileProcessor implements FileProcessorInterface
 
             $uploadedFile->move($this->fileDirectory, $file['filename']);
 
-            $file['path'] = UrlHelper::urlEncode($this->fileUrlPrefix . '/' . $file['filename']);
+            $file['path'] = $this->fileUrlPrefix . '/' . rawurlencode($file['filename']);
         }
 
         return $file;
