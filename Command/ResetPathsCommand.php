@@ -37,7 +37,7 @@ class ResetPathsCommand extends Command
             $files = $this->contentManager->allFiles();
 
             foreach ($files as $id => $file) {
-                $file['path'] = urlencode($input->getArgument('prefix') . '/' . $file['filename']);
+                $file['path'] = UrlHelper::urlEncode($input->getArgument('prefix') . '/' . $file['filename']);
                 $this->contentManager->skipEvents()->updateFile($id, $file, null);
             }
 
@@ -48,8 +48,8 @@ class ResetPathsCommand extends Command
             $images = $this->contentManager->allImages();
 
             foreach ($images as $id => $image) {
-                $image['path'] = urlencode($input->getArgument('prefix') . '/' . $image['filename']);
-                $image['thumbnailPath'] = urlencode($input->getArgument('prefix') . '/thumbnails/' . $image['filename']);
+                $image['path'] = UrlHelper::urlEncode($input->getArgument('prefix') . '/' . $image['filename']);
+                $image['thumbnailPath'] = UrlHelper::urlEncode($input->getArgument('prefix') . '/thumbnails/' . $image['filename']);
                 $this->contentManager->skipEvents()->updateImage($id, $image, null);
             }
 

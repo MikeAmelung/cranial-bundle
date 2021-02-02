@@ -2,6 +2,8 @@
 
 namespace MikeAmelung\CranialBundle\FileProcessor;
 
+use MikeAmelung\CranialBundle\Utils\UrlHelper;
+
 use Aws\S3\S3Client;
 
 class S3FileProcessor implements FileProcessorInterface
@@ -49,7 +51,7 @@ class S3FileProcessor implements FileProcessorInterface
                 'ACL' => 'public-read',
             ]);
 
-            $file['path'] = urlencode($this->fileUrlPrefix . '/' . $file['filename']);
+            $file['path'] = UrlHelper::urlEncode($this->fileUrlPrefix . '/' . $file['filename']);
         }
 
         return $file;
