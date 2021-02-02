@@ -21,6 +21,8 @@ class ContentManager
     private $storage;
     private $twig;
 
+    private $skipEvents = false;
+
     public function __construct(
         $configDirectory,
         FileProcessorInterface $fileProcessor,
@@ -359,9 +361,19 @@ class ContentManager
         return $output;
     }
 
+    public function skipEvents()
+    {
+        $this->skipEvents = true;
+
+        return $this;
+    }
+
     private function createEvent($objectType, $object)
     {
-        /*
+        if ($this->skipEvents) {
+            return $object;
+        }
+
         if (!isset($object['meta'])) {
             $object['meta'] = [];
         }
@@ -370,14 +382,16 @@ class ContentManager
             'label' => 'Last Updated',
             'value' => (new \DateTime())->format('m/d/Y H:i:s')
         ];
-        */
 
         return $object;
     }
 
     private function updateEvent($objectType, $object)
     {
-        /*
+        if ($this->skipEvents) {
+            return $object;
+        }
+
         if (!isset($object['meta'])) {
             $object['meta'] = [];
         }
@@ -386,7 +400,6 @@ class ContentManager
             'label' => 'Last Updated',
             'value' => (new \DateTime())->format('m/d/Y H:i:s')
         ];
-        */
 
         return $object;
     }
