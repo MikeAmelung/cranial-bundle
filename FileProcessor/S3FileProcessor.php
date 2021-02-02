@@ -46,6 +46,7 @@ class S3FileProcessor implements FileProcessorInterface
                 'Key' => $this->fileDirectory . '/' . $file['filename'],
                 'SourceFile' => $uploadedFile->getRealPath(),
                 'ContentType' => $uploadedFile->getMimeType(),
+                'ACL' => 'public-read',
             ]);
 
             $file['path'] = $this->fileUrlPrefix . '/' . $file['filename'];
