@@ -20,7 +20,7 @@ class S3ImageProcessor implements ImageProcessorInterface
 
         $this->s3Client = new S3Client([
             'region' => $s3Region,
-            'version' => '2006-03-01',
+            'version' => 'latest',
             'credentials' => [
                 'key' => $s3Key,
                 'secret' => $s3Secret,
