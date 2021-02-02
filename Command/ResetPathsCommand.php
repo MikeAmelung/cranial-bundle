@@ -9,7 +9,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 use MikeAmelung\CranialBundle\ContentManager\ContentManager;
 
-class DupeContentCommand extends Command
+class ResetPathsCommand extends Command
 {
     protected static $defaultName = 'cranial:reset-paths';
     private $contentManager;
