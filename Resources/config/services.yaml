@@ -21,6 +21,10 @@ services:
         arguments:
             $contentManager: '@MikeAmelung\CranialBundle\ContentManager\ContentManager'
         tags: ["console.command"]
+    MikeAmelung\CranialBundle\Command\ResetPathsCommand:
+        arguments:
+            $contentManager: '@MikeAmelung\CranialBundle\ContentManager\ContentManager'
+        tags: ["console.command"]
     MikeAmelung\CranialBundle\Command\ScanImagesCommand:
         arguments:
             $contentManager: '@MikeAmelung\CranialBundle\ContentManager\ContentManager'
