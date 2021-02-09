@@ -29,11 +29,11 @@ services:
     MikeAmelung\CranialBundle\Twig\CranialExtension:
         arguments: ['@MikeAmelung\CranialBundle\Utils\Markdown']
         tags: ["twig.extension"]
-    MikeAmelung\CranialBundle\Twig\CranialFileUrlFunctionRuntime:
+    MikeAmelung\CranialBundle\Twig\CranialFileFunctionRuntime:
         arguments:
             $contentManager: '@MikeAmelung\CranialBundle\ContentManager\ContentManager'
         tags: ["twig.runtime"]
-    MikeAmelung\CranialBundle\Twig\CranialImageUrlFunctionRuntime:
+    MikeAmelung\CranialBundle\Twig\CranialImageFunctionRuntime:
         arguments:
             $contentManager: '@MikeAmelung\CranialBundle\ContentManager\ContentManager'
         tags: ["twig.runtime"]

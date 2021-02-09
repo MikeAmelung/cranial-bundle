@@ -46,8 +46,8 @@ class CranialExtension extends AbstractExtension
     public function getFunctions()
     {
         return [
-            new TwigFunction('cranial_file_url', [CranialFileUrlFunctionRuntime::class, 'url']),
-            new TwigFunction('cranial_image_url', [CranialImageUrlFunctionRuntime::class, 'url']),
+            new TwigFunction('cranial_file', [CranialFileFunctionRuntime::class, 'file']),
+            new TwigFunction('cranial_image', [CranialImageFunctionRuntime::class, 'image']),
         ];
     }
 }

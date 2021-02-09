@@ -6,7 +6,7 @@ use Twig\Extension\RuntimeExtensionInterface;
 
 use MikeAmelung\CranialBundle\ContentManager\ContentManager;
 
-class CranialFileUrlFunctionRuntime implements RuntimeExtensionInterface
+class CranialImageFunctionRuntime implements RuntimeExtensionInterface
 {
     private $contentManager;
 
@@ -15,8 +15,8 @@ class CranialFileUrlFunctionRuntime implements RuntimeExtensionInterface
         $this->contentManager = $contentManager;
     }
 
-    public function url($fileId)
+    public function image($imageId)
     {
-        return $this->contentManager->filePath($fileId);
+        return $this->contentManager->image($imageId);
     }
 }
