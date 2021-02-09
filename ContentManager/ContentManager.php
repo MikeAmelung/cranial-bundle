@@ -298,6 +298,16 @@ class ContentManager
 
         $content = $this->storage->content($id);
 
+        /*
+         * This is to allow using {% cranial_image_url(imageId) %} and {% cranial_file_url(fileId) %} functions
+         * in the managed content.
+         */
+        $twiggedData = $content['data'];
+        array_walk_recursive($twiggedData, function (&$data) {
+            $dataTemplate = $this->twig->createTemplate($data);
+            $data = $dataTemplate->render();
+        });
+
         if (
             $content &&
             isset($content['templateKey'])
@@ -308,7 +318,7 @@ class ContentManager
                     [
                         'id' => $id
                     ],
-                    $content['data']
+                    $twiggedData
                 )
             );
         }

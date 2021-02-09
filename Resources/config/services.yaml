@@ -1,18 +1,4 @@
 services:
-    MikeAmelung\CranialBundle\Utils\Markdown:
-    MikeAmelung\CranialBundle\Controller\:
-        resource: "../../Controller"
-        tags: ["controller.service_arguments"]
-    MikeAmelung\CranialBundle\Twig\CranialExtension:
-        arguments: ['@MikeAmelung\CranialBundle\Utils\Markdown']
-        tags: ["twig.extension"]
-    MikeAmelung\CranialBundle\ContentManager\ContentManager:
-        arguments:
-            $configDirectory: "%mike_amelung_cranial.config_directory%"
-            $fileProcessor: "@mike_amelung_cranial.file_processor"
-            $imageProcessor: "@mike_amelung_cranial.image_processor"
-            $storage: "@mike_amelung_cranial.storage"
-            $twig: "@twig"
     MikeAmelung\CranialBundle\Command\DupeContentCommand:
         arguments:
             $contentManager: '@MikeAmelung\CranialBundle\ContentManager\ContentManager'
@@ -30,3 +16,25 @@ services:
             $contentManager: '@MikeAmelung\CranialBundle\ContentManager\ContentManager'
             $imageProcessor: "@mike_amelung_cranial.image_processor"
         tags: ["console.command"]
+    MikeAmelung\CranialBundle\ContentManager\ContentManager:
+        arguments:
+            $configDirectory: "%mike_amelung_cranial.config_directory%"
+            $fileProcessor: "@mike_amelung_cranial.file_processor"
+            $imageProcessor: "@mike_amelung_cranial.image_processor"
+            $storage: "@mike_amelung_cranial.storage"
+            $twig: "@twig"
+    MikeAmelung\CranialBundle\Controller\:
+        resource: "../../Controller"
+        tags: ["controller.service_arguments"]
+    MikeAmelung\CranialBundle\Twig\CranialExtension:
+        arguments: ['@MikeAmelung\CranialBundle\Utils\Markdown']
+        tags: ["twig.extension"]
+    MikeAmelung\CranialBundle\Twig\CranialFileUrlFunctionRuntime:
+        arguments:
+            $contentManager: '@MikeAmelung\CranialBundle\ContentManager\ContentManager'
+        tags: ["twig.runtime"]
+    MikeAmelung\CranialBundle\Twig\CranialImageUrlFunctionRuntime:
+        arguments:
+            $contentManager: '@MikeAmelung\CranialBundle\ContentManager\ContentManager'
+        tags: ["twig.runtime"]
+    MikeAmelung\CranialBundle\Utils\Markdown:

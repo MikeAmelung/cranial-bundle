@@ -2,9 +2,13 @@
 
 namespace MikeAmelung\CranialBundle\Twig;
 
-use MikeAmelung\CranialBundle\Utils\Markdown;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
+use Twig\TwigFunction;
+
+use MikeAmelung\CranialBundle\Twig\CranialFileUrlFunctionRuntime;
+use MikeAmelung\CranialBundle\Twig\CranialImageUrlFunctionRuntime;
+use MikeAmelung\CranialBundle\Utils\Markdown;
 
 class CranialExtension extends AbstractExtension
 {
@@ -37,5 +41,13 @@ class CranialExtension extends AbstractExtension
     public function markdownToHtmlInline($content)
     {
         return $this->parser->toHtmlInline($content);
+    }
+
+    public function getFunctions()
+    {
+        return [
+            new TwigFunction('cranial_file_url', [CranialFileUrlFunctionRuntime::class, 'url']),
+            new TwigFunction('cranial_image_url', [CranialImageUrlFunctionRuntime::class, 'url']),
+        ];
     }
 }
