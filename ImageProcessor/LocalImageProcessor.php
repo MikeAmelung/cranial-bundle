@@ -17,7 +17,9 @@ class LocalImageProcessor implements ImageProcessorInterface
     {
         if ($file) {
             if ($file->getError()) {
-                throw new \Exception('There was a problem uploading the image.');
+                throw new \Exception(
+                    'There was a problem uploading the image.'
+                );
             }
 
             if (isset($image['filename']) && $image['filename']) {
@@ -29,7 +31,8 @@ class LocalImageProcessor implements ImageProcessorInterface
             $file->move($this->imageDirectory, $image['filename']);
 
             $image['path'] = $this->imageUrlPrefix . '/' . $image['filename'];
-            $image['thumbnailPath'] = $this->imageUrlPrefix . '/thumbnails/' . $image['filename'];
+            $image['thumbnailPath'] =
+                $this->imageUrlPrefix . '/thumbnails/' . $image['filename'];
 
             $this->generateThumbnail($image['filename']);
         }
@@ -44,16 +47,15 @@ class LocalImageProcessor implements ImageProcessorInterface
         }
     }
 
-    private function unlink($filename) {
+    private function unlink($filename)
+    {
         $path = $this->imageDirectory . '/' . $filename;
 
         if (file_exists($path)) {
             unlink($path);
         }
 
-        $thumbnailPath = $this->imageDirectory .
-            '/thumbnails/' .
-            $filename;
+        $thumbnailPath = $this->imageDirectory . '/thumbnails/' . $filename;
 
         if (file_exists($thumbnailPath)) {
             unlink($thumbnailPath);
@@ -62,12 +64,8 @@ class LocalImageProcessor implements ImageProcessorInterface
 
     public function generateThumbnail($filename)
     {
-        $originalFilePath =
-            $this->imageDirectory . '/' . $filename;
-        $thumbnailFilePath =
-            $this->imageDirectory .
-            '/thumbnails/' .
-            $filename;
+        $originalFilePath = $this->imageDirectory . '/' . $filename;
+        $thumbnailFilePath = $this->imageDirectory . '/thumbnails/' . $filename;
 
         $thumb = new \Imagick($originalFilePath);
 

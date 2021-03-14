@@ -11,8 +11,14 @@ class S3FileProcessor implements FileProcessorInterface
     private $s3Bucket;
     private $s3Client;
 
-    public function __construct($fileDirectory, $fileUrlPrefix, $s3Bucket, $s3Key, $s3Region, $s3Secret)
-    {
+    public function __construct(
+        $fileDirectory,
+        $fileUrlPrefix,
+        $s3Bucket,
+        $s3Key,
+        $s3Region,
+        $s3Secret
+    ) {
         $this->fileDirectory = $fileDirectory;
         $this->fileUrlPrefix = $fileUrlPrefix;
 
@@ -49,7 +55,8 @@ class S3FileProcessor implements FileProcessorInterface
                 'ACL' => 'public-read',
             ]);
 
-            $file['path'] = $this->fileUrlPrefix . '/' . rawurlencode($file['filename']);
+            $file['path'] =
+                $this->fileUrlPrefix . '/' . rawurlencode($file['filename']);
         }
 
         return $file;

@@ -28,7 +28,8 @@ class LocalFileProcessor implements FileProcessorInterface
 
             $uploadedFile->move($this->fileDirectory, $file['filename']);
 
-            $file['path'] = $this->fileUrlPrefix . '/' . rawurlencode($file['filename']);
+            $file['path'] =
+                $this->fileUrlPrefix . '/' . rawurlencode($file['filename']);
         }
 
         return $file;

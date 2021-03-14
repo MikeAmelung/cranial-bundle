@@ -20,6 +20,7 @@ class ContentManager
     private $imageProcessor;
     private $storage;
     private $twig;
+    private $eventHandlers;
 
     private $skipEvents = false;
 
@@ -28,7 +29,8 @@ class ContentManager
         FileProcessorInterface $fileProcessor,
         ImageProcessorInterface $imageProcessor,
         StorageInterface $storage,
-        Environment $twig
+        Environment $twig,
+        iterable $eventHandlers
     ) {
         $this->configDirectory = $configDirectory;
         $this->types = json_decode(
@@ -50,6 +52,8 @@ class ContentManager
         $this->storage = $storage;
 
         $this->twig = $twig;
+
+        $this->eventHandlers = $eventHandlers;
     }
 
     public function allContent()
@@ -116,7 +120,11 @@ class ContentManager
         $id = $this->storage->createImage($image);
 
         try {
-            $processedImage = $this->imageProcessor->handleUpload($id, $image, $file);
+            $processedImage = $this->imageProcessor->handleUpload(
+                $id,
+                $image,
+                $file
+            );
         } catch (\Exception $e) {
             $this->storage->deleteImage($id);
 
@@ -133,7 +141,11 @@ class ContentManager
     public function updateImage($id, $image, $file)
     {
         try {
-            $processedImage = $this->imageProcessor->handleUpload($id, $image, $file);
+            $processedImage = $this->imageProcessor->handleUpload(
+                $id,
+                $image,
+                $file
+            );
         } catch (\Exception $e) {
             throw $e;
         }
@@ -180,7 +192,11 @@ class ContentManager
         $id = $this->storage->createFile($file);
 
         try {
-            $processedFile = $this->fileProcessor->handleUpload($id, $file, $uploadedFile);
+            $processedFile = $this->fileProcessor->handleUpload(
+                $id,
+                $file,
+                $uploadedFile
+            );
         } catch (\Exception $e) {
             $this->storage->deleteFile($id);
 
@@ -197,7 +213,11 @@ class ContentManager
     public function updateFile($id, $file, $uploadedFile)
     {
         try {
-            $processedFile = $this->fileProcessor->handleUpload($id, $file, $uploadedFile);
+            $processedFile = $this->fileProcessor->handleUpload(
+                $id,
+                $file,
+                $uploadedFile
+            );
         } catch (\Exception $e) {
             throw $e;
         }
@@ -238,7 +258,10 @@ class ContentManager
 
         return [
             'pageId' => $pageIdAndPage['pageId'],
-            'templateId' => $this->pageTemplates[$pageIdAndPage['page']['templateKey']]['id'],
+            'templateId' =>
+                $this->pageTemplates[$pageIdAndPage['page']['templateKey']][
+                    'id'
+                ],
         ];
     }
 
@@ -283,7 +306,7 @@ class ContentManager
     public function renderContent($id, $container = ['tag' => 'div'])
     {
         if ($container) {
-            $attrs = "";
+            $attrs = '';
 
             if (isset($container['attr'])) {
                 foreach ($container['attr'] as $attr => $val) {
@@ -308,15 +331,12 @@ class ContentManager
             $data = $dataTemplate->render();
         });
 
-        if (
-            $content &&
-            isset($content['templateKey'])
-        ) {
+        if ($content && isset($content['templateKey'])) {
             $output .= $this->twig->render(
                 'content/' . $content['templateKey'] . '.html.twig',
                 array_merge(
                     [
-                        'id' => $id
+                        'id' => $id,
                     ],
                     $twiggedData
                 )
@@ -340,7 +360,7 @@ class ContentManager
         $container = ['tag' => 'div']
     ) {
         if ($container) {
-            $attrs = "";
+            $attrs = '';
 
             if (isset($container['attr'])) {
                 foreach ($container['attr'] as $attr => $val) {
@@ -356,10 +376,7 @@ class ContentManager
         $page = $this->storage->page($pageId);
 
         if (isset($page['contentMap'][$slotKey])) {
-            foreach (
-                $page['contentMap'][$slotKey]
-                as $contentId
-            ) {
+            foreach ($page['contentMap'][$slotKey] as $contentId) {
                 $output .= $this->renderContent($contentId);
             }
         }
@@ -384,14 +401,9 @@ class ContentManager
             return $object;
         }
 
-        if (!isset($object['meta'])) {
-            $object['meta'] = [];
+        foreach ($this->eventHandlers as $eventHandler) {
+            $object = $eventHandler->handleCreate($objectType, $object);
         }
-
-        $object['meta']['last_updated'] = [
-            'label' => 'Last Updated',
-            'value' => (new \DateTime())->format('m/d/Y H:i:s')
-        ];
 
         return $object;
     }
@@ -402,14 +414,9 @@ class ContentManager
             return $object;
         }
 
-        if (!isset($object['meta'])) {
-            $object['meta'] = [];
+        foreach ($this->eventHandlers as $eventHandler) {
+            $object = $eventHandler->handleUpdate($objectType, $object);
         }
-
-        $object['meta']['last_updated'] = [
-            'label' => 'Last Updated',
-            'value' => (new \DateTime())->format('m/d/Y H:i:s')
-        ];
 
         return $object;
     }

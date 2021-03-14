@@ -25,7 +25,7 @@ class ContentController
 
         return new JsonResponse([
             'errors' => [],
-            'types' => $types
+            'types' => $types,
         ]);
     }
 
@@ -40,7 +40,7 @@ class ContentController
 
         return new JsonResponse([
             'errors' => [],
-            'templates' => $templates
+            'templates' => $templates,
         ]);
     }
 
@@ -55,7 +55,7 @@ class ContentController
 
         return new JsonResponse([
             'errors' => [],
-            'pageTemplates' => $pageTemplates
+            'pageTemplates' => $pageTemplates,
         ]);
     }
 
@@ -68,7 +68,7 @@ class ContentController
 
         return new JsonResponse([
             'errors' => [],
-            'content' => $content
+            'content' => $content,
         ]);
     }
 
@@ -84,7 +84,7 @@ class ContentController
 
         return new JsonResponse([
             'errors' => [],
-            'content' => $content
+            'content' => $content,
         ]);
     }
 
@@ -102,7 +102,7 @@ class ContentController
         return new JsonResponse([
             'errors' => [],
             'id' => $contentAndId['id'],
-            'content' => $contentAndId['content']
+            'content' => $contentAndId['content'],
         ]);
     }
 
@@ -122,7 +122,7 @@ class ContentController
         return new JsonResponse([
             'errors' => [],
             'content' => $content,
-            'rendered' => $rendered
+            'rendered' => $rendered,
         ]);
     }
 
@@ -137,7 +137,7 @@ class ContentController
         $contentManager->deleteContent($id);
 
         return new JsonResponse([
-            'errors' => []
+            'errors' => [],
         ]);
     }
 
@@ -150,7 +150,7 @@ class ContentController
 
         return new JsonResponse([
             'errors' => [],
-            'files' => $files
+            'files' => $files,
         ]);
     }
 
@@ -163,17 +163,15 @@ class ContentController
 
         return new JsonResponse([
             'errors' => [],
-            'file' => $file
+            'file' => $file,
         ]);
     }
 
     /**
      * @Route("/file/create", name="mikeamelung_cranial_create_file", methods={"POST"})
      */
-    public function createFile(
-        ContentManager $contentManager,
-        Request $request
-    ) {
+    public function createFile(ContentManager $contentManager, Request $request)
+    {
         $r = json_decode($request->request->get('json'), true);
         $uploadedFile = $request->files->get('file');
 
@@ -190,25 +188,27 @@ class ContentController
         return new JsonResponse([
             'errors' => [],
             'id' => $fileAndId['id'],
-            'file' => $fileAndId['file']
+            'file' => $fileAndId['file'],
         ]);
     }
 
     /**
      * @Route("/file/update", name="mikeamelung_cranial_update_file", methods={"POST"})
      */
-    public function updateFile(
-        ContentManager $contentManager,
-        Request $request
-    ) {
+    public function updateFile(ContentManager $contentManager, Request $request)
+    {
         $r = json_decode($request->request->get('json'), true);
         $uploadedFile = $request->files->get('file');
 
-        $file = $contentManager->updateFile($r['id'], $r['file'], $uploadedFile);
+        $file = $contentManager->updateFile(
+            $r['id'],
+            $r['file'],
+            $uploadedFile
+        );
 
         return new JsonResponse([
             'errors' => [],
-            'file' => $file
+            'file' => $file,
         ]);
     }
 
@@ -223,7 +223,7 @@ class ContentController
         $contentManager->deleteFile($id);
 
         return new JsonResponse([
-            'errors' => []
+            'errors' => [],
         ]);
     }
 
@@ -236,7 +236,7 @@ class ContentController
 
         return new JsonResponse([
             'errors' => [],
-            'images' => $images
+            'images' => $images,
         ]);
     }
 
@@ -249,7 +249,7 @@ class ContentController
 
         return new JsonResponse([
             'errors' => [],
-            'image' => $image
+            'image' => $image,
         ]);
     }
 
@@ -268,7 +268,7 @@ class ContentController
         return new JsonResponse([
             'errors' => [],
             'id' => $imageAndId['id'],
-            'image' => $imageAndId['image']
+            'image' => $imageAndId['image'],
         ]);
     }
 
@@ -286,7 +286,7 @@ class ContentController
 
         return new JsonResponse([
             'errors' => [],
-            'image' => $image
+            'image' => $image,
         ]);
     }
 
@@ -301,7 +301,7 @@ class ContentController
         $contentManager->deleteImage($id);
 
         return new JsonResponse([
-            'errors' => []
+            'errors' => [],
         ]);
     }
 
@@ -314,7 +314,7 @@ class ContentController
 
         return new JsonResponse([
             'errors' => [],
-            'pages' => $pages
+            'pages' => $pages,
         ]);
     }
 
@@ -327,7 +327,7 @@ class ContentController
 
         return new JsonResponse([
             'errors' => [],
-            'page' => $page
+            'page' => $page,
         ]);
     }
 
@@ -343,7 +343,7 @@ class ContentController
         return new JsonResponse([
             'errors' => [],
             'id' => $pageAndId['id'],
-            'page' => $pageAndId['page']
+            'page' => $pageAndId['page'],
         ]);
     }
 
@@ -369,7 +369,7 @@ class ContentController
         return new JsonResponse([
             'errors' => [],
             'page' => $page,
-            'renderedSlots' => $renderedSlots
+            'renderedSlots' => $renderedSlots,
         ]);
     }
 
@@ -384,7 +384,7 @@ class ContentController
         $contentManager->deletePage($id);
 
         return new JsonResponse([
-            'errors' => []
+            'errors' => [],
         ]);
     }
 }

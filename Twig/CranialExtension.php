@@ -22,14 +22,22 @@ class CranialExtension extends AbstractExtension
     public function getFilters()
     {
         return [
-            new TwigFilter('md', [$this, 'markdownToHtml'], [
-                'is_safe' => ['html'],
-                'pre_escape' => 'html',
-            ]),
-            new TwigFilter('mdinline', [$this, 'markdownToHtmlInline'], [
-                'is_safe' => ['html'],
-                'pre_escape' => 'html',
-            ]),
+            new TwigFilter(
+                'md',
+                [$this, 'markdownToHtml'],
+                [
+                    'is_safe' => ['html'],
+                    'pre_escape' => 'html',
+                ]
+            ),
+            new TwigFilter(
+                'mdinline',
+                [$this, 'markdownToHtmlInline'],
+                [
+                    'is_safe' => ['html'],
+                    'pre_escape' => 'html',
+                ]
+            ),
         ];
     }
 
@@ -46,8 +54,14 @@ class CranialExtension extends AbstractExtension
     public function getFunctions()
     {
         return [
-            new TwigFunction('cranial_file', [CranialFileFunctionRuntime::class, 'file']),
-            new TwigFunction('cranial_image', [CranialImageFunctionRuntime::class, 'image']),
+            new TwigFunction('cranial_file', [
+                CranialFileFunctionRuntime::class,
+                'file',
+            ]),
+            new TwigFunction('cranial_image', [
+                CranialImageFunctionRuntime::class,
+                'image',
+            ]),
         ];
     }
 }

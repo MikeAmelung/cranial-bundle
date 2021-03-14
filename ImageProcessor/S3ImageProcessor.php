@@ -11,8 +11,14 @@ class S3ImageProcessor implements ImageProcessorInterface
     private $s3Bucket;
     private $s3Client;
 
-    public function __construct($imageDirectory, $imageUrlPrefix, $s3Bucket, $s3Key, $s3Region, $s3Secret)
-    {
+    public function __construct(
+        $imageDirectory,
+        $imageUrlPrefix,
+        $s3Bucket,
+        $s3Key,
+        $s3Region,
+        $s3Secret
+    ) {
         $this->imageDirectory = $imageDirectory;
         $this->imageUrlPrefix = $imageUrlPrefix;
 
@@ -32,7 +38,9 @@ class S3ImageProcessor implements ImageProcessorInterface
     {
         if ($file) {
             if ($file->getError()) {
-                throw new \Exception('There was a problem uploading the image.');
+                throw new \Exception(
+                    'There was a problem uploading the image.'
+                );
             }
 
             if (isset($image['filename']) && $image['filename']) {
@@ -49,7 +57,8 @@ class S3ImageProcessor implements ImageProcessorInterface
             ]);
 
             $image['path'] = $this->imageUrlPrefix . '/' . $image['filename'];
-            $image['thumbnailPath'] = $this->imageUrlPrefix . '/thumbnails/' . $image['filename'];
+            $image['thumbnailPath'] =
+                $this->imageUrlPrefix . '/thumbnails/' . $image['filename'];
 
             $this->generateThumbnail($image['filename']);
         }
@@ -64,11 +73,10 @@ class S3ImageProcessor implements ImageProcessorInterface
         }
     }
 
-    private function unlink($filename) {
+    private function unlink($filename)
+    {
         $path = $this->imageDirectory . '/' . $filename;
-        $thumbnailPath = $this->imageDirectory .
-            '/thumbnails/' .
-            $filename;
+        $thumbnailPath = $this->imageDirectory . '/thumbnails/' . $filename;
 
         $this->s3Client->deleteObject([
             'Bucket' => $this->s3Bucket,
@@ -82,18 +90,16 @@ class S3ImageProcessor implements ImageProcessorInterface
 
     public function generateThumbnail($filename)
     {
-        $originalFilePath =
-            $this->imageDirectory . '/' . $filename;
-        $thumbnailFilePath =
-            $this->imageDirectory .
-            '/thumbnails/' .
-            $filename;
+        $originalFilePath = $this->imageDirectory . '/' . $filename;
+        $thumbnailFilePath = $this->imageDirectory . '/thumbnails/' . $filename;
 
         $thumb = new \Imagick();
-        $thumb->readImageBlob($this->s3Client->getObject([
-            'Bucket' => $this->s3Bucket,
-            'Key' => $originalFilePath,
-        ])['Body']);
+        $thumb->readImageBlob(
+            $this->s3Client->getObject([
+                'Bucket' => $this->s3Bucket,
+                'Key' => $originalFilePath,
+            ])['Body']
+        );
 
         if ($thumb->getImageFormat() === 'GIF') {
             $thumb = $thumb->coalesceImages();

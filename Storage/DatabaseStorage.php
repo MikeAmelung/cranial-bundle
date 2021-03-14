@@ -42,14 +42,18 @@ class DatabaseStorage implements StorageInterface
     {
         $contentByType = [];
 
-        $entities = $this->em->getRepository(Content::class)->createQueryBuilder('c')
+        $entities = $this->em
+            ->getRepository(Content::class)
+            ->createQueryBuilder('c')
             ->where("JSON_EXTRACT(c.payload, '$.typeKey') = :typeKey")
             ->setParameter('typeKey', $typeKey)
             ->getQuery()
             ->getResult();
 
         foreach ($entities as $entity) {
-            $contentByType[$entity->getId()->__toString()] = $entity->getPayload();
+            $contentByType[
+                $entity->getId()->__toString()
+            ] = $entity->getPayload();
         }
 
         return $contentByType;
@@ -204,7 +208,9 @@ class DatabaseStorage implements StorageInterface
 
     public function pageByRoute($route)
     {
-        $entity = $this->em->getRepository(Page::class)->createQueryBuilder('p')
+        $entity = $this->em
+            ->getRepository(Page::class)
+            ->createQueryBuilder('p')
             ->where("JSON_EXTRACT(p.payload, '$.route') = :route")
             ->setParameter('route', $route)
             ->getQuery()

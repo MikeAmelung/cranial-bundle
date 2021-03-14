@@ -2,39 +2,42 @@ services:
     MikeAmelung\CranialBundle\Command\DupeContentCommand:
         arguments:
             $contentManager: '@MikeAmelung\CranialBundle\ContentManager\ContentManager'
-        tags: ["console.command"]
+        tags: ['console.command']
     MikeAmelung\CranialBundle\Command\GenerateThumbnailsCommand:
         arguments:
             $contentManager: '@MikeAmelung\CranialBundle\ContentManager\ContentManager'
-        tags: ["console.command"]
+        tags: ['console.command']
     MikeAmelung\CranialBundle\Command\ResetPathsCommand:
         arguments:
             $contentManager: '@MikeAmelung\CranialBundle\ContentManager\ContentManager'
-        tags: ["console.command"]
+        tags: ['console.command']
     MikeAmelung\CranialBundle\Command\ScanImagesCommand:
         arguments:
             $contentManager: '@MikeAmelung\CranialBundle\ContentManager\ContentManager'
-            $imageProcessor: "@mike_amelung_cranial.image_processor"
-        tags: ["console.command"]
+            $imageProcessor: '@mike_amelung_cranial.image_processor'
+        tags: ['console.command']
     MikeAmelung\CranialBundle\ContentManager\ContentManager:
         arguments:
-            $configDirectory: "%mike_amelung_cranial.config_directory%"
-            $fileProcessor: "@mike_amelung_cranial.file_processor"
-            $imageProcessor: "@mike_amelung_cranial.image_processor"
-            $storage: "@mike_amelung_cranial.storage"
-            $twig: "@twig"
+            $configDirectory: '%mike_amelung_cranial.config_directory%'
+            $fileProcessor: '@mike_amelung_cranial.file_processor'
+            $imageProcessor: '@mike_amelung_cranial.image_processor'
+            $storage: '@mike_amelung_cranial.storage'
+            $twig: '@twig'
+            $eventHandlers: !tagged_iterator cranial.event_handler
     MikeAmelung\CranialBundle\Controller\:
-        resource: "../../Controller"
-        tags: ["controller.service_arguments"]
+        resource: '../../Controller'
+        tags: ['controller.service_arguments']
+    MikeAmelung\CranialBundle\EventHandlers\LastUpdated:
+        tags: ['cranial.event_handler']
     MikeAmelung\CranialBundle\Twig\CranialExtension:
         arguments: ['@MikeAmelung\CranialBundle\Utils\Markdown']
-        tags: ["twig.extension"]
+        tags: ['twig.extension']
     MikeAmelung\CranialBundle\Twig\CranialFileFunctionRuntime:
         arguments:
             $contentManager: '@MikeAmelung\CranialBundle\ContentManager\ContentManager'
-        tags: ["twig.runtime"]
+        tags: ['twig.runtime']
     MikeAmelung\CranialBundle\Twig\CranialImageFunctionRuntime:
         arguments:
             $contentManager: '@MikeAmelung\CranialBundle\ContentManager\ContentManager'
-        tags: ["twig.runtime"]
+        tags: ['twig.runtime']
     MikeAmelung\CranialBundle\Utils\Markdown:

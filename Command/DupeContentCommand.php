@@ -23,19 +23,25 @@ class DupeContentCommand extends Command
 
     protected function configure()
     {
-        $this
-            ->setDescription('Duplicate a content item and get the new ID.')
+        $this->setDescription('Duplicate a content item and get the new ID.')
             ->setHelp('...')
-            ->addArgument('contentId', InputArgument::REQUIRED, 'The ID of the content to duplicate.')
-        ;
+            ->addArgument(
+                'contentId',
+                InputArgument::REQUIRED,
+                'The ID of the content to duplicate.'
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $existingContent = $this->contentManager->content($input->getArgument('contentId'));
+        $existingContent = $this->contentManager->content(
+            $input->getArgument('contentId')
+        );
 
         if ($existingContent) {
-            $newIdAndContent = $this->contentManager->createContent($existingContent);
+            $newIdAndContent = $this->contentManager->createContent(
+                $existingContent
+            );
 
             $output->writeln('New content ID: ' . $newIdAndContent['id']);
 
