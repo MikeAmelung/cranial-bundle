@@ -1,4 +1,7 @@
 services:
+    _defaults:
+        autowire: false
+        autoconfigure: false
     MikeAmelung\CranialBundle\Command\DupeContentCommand:
         arguments:
             $contentManager: '@MikeAmelung\CranialBundle\ContentManager\ContentManager'
