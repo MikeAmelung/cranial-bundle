@@ -5,10 +5,20 @@ namespace MikeAmelung\CranialBundle\DependencyInjection;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
+use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
-class MikeAmelungCranialExtension extends Extension
+class MikeAmelungCranialExtension extends Extension implements PrependExtensionInterface
 {
+    public function prepend(ContainerBuilder $container)
+    {
+        $loader = new YamlFileLoader(
+            $container,
+            new FileLocator(__DIR__ . '/../Resources/config')
+        );
+        $loader->load('doctrine.yaml');
+    }
+
     public function load(array $configs, ContainerBuilder $container)
     {
         $configuration = new Configuration();
@@ -25,6 +35,5 @@ class MikeAmelungCranialExtension extends Extension
             new FileLocator(__DIR__ . '/../Resources/config')
         );
         $loader->load('services.yaml');
-        $loader->load('doctrine.yaml');
     }
 }
