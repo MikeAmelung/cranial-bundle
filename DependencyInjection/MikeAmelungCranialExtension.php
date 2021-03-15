@@ -25,5 +25,6 @@ class MikeAmelungCranialExtension extends Extension
             new FileLocator(__DIR__ . '/../Resources/config')
         );
         $loader->load('services.yaml');
+        $loader->load('doctrine.yaml');
     }
 }
