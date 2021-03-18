@@ -12,11 +12,15 @@ class MikeAmelungCranialExtension extends Extension implements PrependExtensionI
 {
     public function prepend(ContainerBuilder $container)
     {
-        $loader = new YamlFileLoader(
-            $container,
-            new FileLocator(__DIR__ . '/../Resources/config')
-        );
-        $loader->load('doctrine.yaml');
+        $bundles = $container->getParameter('kernel.bundles');
+
+        if (isset($bundles['DoctrineBundle'])) {
+            $loader = new YamlFileLoader(
+                $container,
+                new FileLocator(__DIR__ . '/../Resources/config')
+            );
+            $loader->load('doctrine.yaml');
+        }
     }
 
     public function load(array $configs, ContainerBuilder $container)
