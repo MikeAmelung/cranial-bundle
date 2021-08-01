@@ -53,7 +53,6 @@ class S3ImageProcessor implements ImageProcessorInterface
                 'Key' => $this->imageDirectory . '/' . $image['filename'],
                 'SourceFile' => $file->getRealPath(),
                 'ContentType' => $file->getMimeType(),
-                'ACL' => 'public-read',
             ]);
 
             $image['path'] = $this->imageUrlPrefix . '/' . $image['filename'];
