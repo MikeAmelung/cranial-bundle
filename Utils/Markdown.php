@@ -2,22 +2,33 @@
 
 namespace MikeAmelung\CranialBundle\Utils;
 
+use League\CommonMark\Environment\Environment;
+use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
+use League\CommonMark\Extension\GithubFlavoredMarkdownExtension;
+use League\CommonMark\Extension\Attributes\AttributesExtension;
+use League\CommonMark\MarkdownConverter;
+
 class Markdown
 {
-    private $parser;
+    private $converter;
 
     public function __construct()
     {
-        $this->parser = new \Parsedown();
+        $environment = new Environment(['allow_unsafe_links' => false]);
+        $environment->addExtension(new AttributesExtension());
+        $environment->addExtension(new CommonMarkCoreExtension());
+        $environment->addExtension(new GithubFlavoredMarkdownExtension());
+
+        $this->converter = new MarkdownConverter($environment);
     }
 
     public function toHtml(?string $text): string
     {
-        return $this->parser->text($text);
+        return $this->converter->convertToHtml($text);
     }
 
     public function toHtmlInline(?string $text): string
     {
-        return $this->parser->line($text);
+        return $this->converter->convertToHtml($text);
     }
 }
