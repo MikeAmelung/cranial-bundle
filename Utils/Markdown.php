@@ -27,7 +27,7 @@ class Markdown
         $inlineEnvironment = new Environment(['allow_unsafe_links' => false]);
         $inlineEnvironment->addExtension(new InlinesOnlyExtension());
 
-        $this->inlineConverter = new CommonMarkConverter(['allow_unsafe_links' => false], $inlineEnvironment);
+        $this->inlineConverter = new MarkdownConverter($inlineEnvironment);
     }
 
     public function toHtml(?string $text): string
