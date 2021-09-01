@@ -27,7 +27,6 @@ class CranialExtension extends AbstractExtension
                 [$this, 'markdownToHtml'],
                 [
                     'is_safe' => ['html'],
-                    'pre_escape' => 'html',
                 ]
             ),
             new TwigFilter(
@@ -35,7 +34,6 @@ class CranialExtension extends AbstractExtension
                 [$this, 'markdownToHtmlInline'],
                 [
                     'is_safe' => ['html'],
-                    'pre_escape' => 'html',
                 ]
             ),
         ];

@@ -17,9 +17,9 @@ class Markdown
     public function __construct()
     {
         $environment = new Environment(['allow_unsafe_links' => false]);
-        $environment->addExtension(new AttributesExtension());
         $environment->addExtension(new CommonMarkCoreExtension());
         $environment->addExtension(new GithubFlavoredMarkdownExtension());
+        $environment->addExtension(new AttributesExtension());
 
         $this->converter = new MarkdownConverter($environment);
 
