@@ -310,9 +310,11 @@ class ContentManager
 
             if (isset($container['attr'])) {
                 foreach ($container['attr'] as $attr => $val) {
-                    $attrs .= "$attr=\"$val\"";
+                    $attrs .= "$attr=\"$val\" ";
                 }
             }
+
+            $attrs = trim($attrs);
 
             $output = "<{$container['tag']} data-content-id=\"$id\" $attrs>";
         } else {
@@ -322,14 +324,18 @@ class ContentManager
         $content = $this->storage->content($id);
 
         /*
-         * This is to allow using {% cranial_image_url(imageId) %} and {% cranial_file_url(fileId) %} functions
+         * This is to allow using {{ cranial_image(imageId) }} and {{ cranial_file(fileId) }} functions
          * in the managed content.
          */
-        $twiggedData = $content['data'];
-        array_walk_recursive($twiggedData, function (&$data) {
-            $dataTemplate = $this->twig->createTemplate($data);
-            $data = $dataTemplate->render();
-        });
+        $contentData = $content['data'];
+        $contentType = $this->types[$content['typeKey']];
+
+        $templatable = [];
+        $this->findTemplatable($contentType['definition'], $templatable);
+
+        foreach ($templatable as $path) {
+            $this->templateTemplatable($path, $contentData);
+        }
 
         if ($content && isset($content['templateKey'])) {
             $output .= $this->twig->render(
@@ -338,7 +344,7 @@ class ContentManager
                     [
                         'id' => $id,
                     ],
-                    $twiggedData
+                    $contentData
                 )
             );
         }
@@ -419,5 +425,38 @@ class ContentManager
         }
 
         return $object;
+    }
+
+    private function findTemplatable($definitions, &$templatable, $current = [])
+    {
+        foreach ($definitions as $definition) {
+            if ('array' === $definition['kind']) {
+                $current[] = $definition['name'];
+                $this->findTemplatable($definition['childDefinition'], $templatable, $current);
+            } else if (isset($definition['templatable']) && true === $definition['templatable']) {
+                $current[] = $definition['name'];
+                $templatable[] =  $current;
+            }
+        }
+    }
+
+    private function templateTemplatable($path, &$contentData)
+    {
+        if (1 === count($path)) {
+            $contentData[$path[0]] = $this->renderTemplatable($contentData[$path[0]]);
+        } else {
+            $nextLevel = array_shift($path);
+
+            foreach ($contentData[$nextLevel] as &$nextLevelData) {
+                $this->templateTemplatable($path, $nextLevelData);
+            }
+        }
+    }
+
+    private function renderTemplatable($data)
+    {
+        $dataTemplate = $this->twig->createTemplate($data);
+
+        return $dataTemplate->render();
     }
 }
