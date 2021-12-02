@@ -19,7 +19,7 @@ class CranialExtension extends AbstractExtension
         $this->parser = $parser;
     }
 
-    public function getFilters()
+    public function getFilters(): array
     {
         return [
             new TwigFilter(
@@ -49,7 +49,7 @@ class CranialExtension extends AbstractExtension
         return $this->parser->toHtmlInline($content);
     }
 
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
             new TwigFunction('cranial_file', [
