@@ -35,7 +35,7 @@ class ScanImagesCommand extends Command
         );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         /*
         TODO: Move this into each image processor

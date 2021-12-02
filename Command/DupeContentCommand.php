@@ -32,7 +32,7 @@ class DupeContentCommand extends Command
             );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $existingContent = $this->contentManager->content(
             $input->getArgument('contentId')

@@ -39,7 +39,7 @@ class ResetPathsCommand extends Command
             );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if ($input->getArgument('type') === 'file') {
             $files = $this->contentManager->allFiles();
