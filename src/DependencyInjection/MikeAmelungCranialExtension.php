@@ -17,7 +17,7 @@ class MikeAmelungCranialExtension extends Extension implements PrependExtensionI
         if (isset($bundles['DoctrineBundle'])) {
             $loader = new YamlFileLoader(
                 $container,
-                new FileLocator(__DIR__ . '/../Resources/config')
+                new FileLocator(__DIR__ . '/../config')
             );
             $loader->load('doctrine.yaml');
         }
@@ -36,7 +36,7 @@ class MikeAmelungCranialExtension extends Extension implements PrependExtensionI
 
         $loader = new YamlFileLoader(
             $container,
-            new FileLocator(__DIR__ . '/../Resources/config')
+            new FileLocator(__DIR__ . '/../config')
         );
         $loader->load('services.yaml');
     }
