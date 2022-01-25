@@ -28,7 +28,7 @@ services:
             $twig: '@twig'
             $eventHandlers: !tagged_iterator cranial.event_handler
     MikeAmelung\CranialBundle\Controller\:
-        resource: '../../Controller'
+        resource: '../src/Controller'
         tags: ['controller.service_arguments']
     MikeAmelung\CranialBundle\EventHandlers\LastUpdated:
         tags: ['cranial.event_handler']
