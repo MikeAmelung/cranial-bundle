@@ -31,11 +31,11 @@ class Markdown
 
     public function toHtml(?string $text): string
     {
-        return $this->converter->convertToHtml($text);
+        return $this->converter->convert($text);
     }
 
     public function toHtmlInline(?string $text): string
     {
-        return $this->inlineConverter->convertToHtml($text);
+        return $this->inlineConverter->convert($text);
     }
 }
