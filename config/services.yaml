@@ -27,9 +27,10 @@ services:
             $storage: '@mike_amelung_cranial.storage'
             $twig: '@twig'
             $eventHandlers: !tagged_iterator cranial.event_handler
-    MikeAmelung\CranialBundle\Controller\:
-        resource: '../src/Controller'
-        tags: ['controller.service_arguments']
+    MikeAmelung\CranialBundle\Controller\ContentController:
+        tags: ['controller.service_arguments', 'container.service_subscriber']
+        calls:
+            - [setContainer, ['@Psr\Container\ContainerInterface']]
     MikeAmelung\CranialBundle\EventHandlers\LastUpdated:
         tags: ['cranial.event_handler']
     MikeAmelung\CranialBundle\Twig\CranialExtension:
