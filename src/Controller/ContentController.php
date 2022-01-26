@@ -157,8 +157,10 @@ class ContentController extends AbstractController
 
     /**
      * @Route("/file/{id}", name="mikeamelung_cranial_get_file", methods={"GET"})
+     *
+     * Function name is getFile to avoid collision with AbstractController::file
      */
-    public function file(ContentManager $contentManager, Request $request, $id)
+    public function getFile(ContentManager $contentManager, Request $request, $id)
     {
         $file = $contentManager->file($id);
 
