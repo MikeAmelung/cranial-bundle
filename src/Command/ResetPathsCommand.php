@@ -2,6 +2,7 @@
 
 namespace MikeAmelung\CranialBundle\Command;
 
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -9,25 +10,21 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 use MikeAmelung\CranialBundle\ContentManager\ContentManager;
 
+#[AsCommand(name: 'cranial:reset-paths', description: 'Update images and files with new paths based on *UrlPrefix.')]
 class ResetPathsCommand extends Command
 {
-    protected static $defaultName = 'cranial:reset-paths';
     private $contentManager;
 
     public function __construct(ContentManager $contentManager)
     {
-        parent::__construct();
-
         $this->contentManager = $contentManager;
+
+        parent::__construct();
     }
 
     protected function configure()
     {
-        $this->setDescription(
-            'Update images and files with new paths based on *UrlPrefix.'
-        )
-            ->setHelp('...')
-            ->addArgument(
+        $this ->addArgument(
                 'type',
                 InputArgument::REQUIRED,
                 'Either image or file.'
