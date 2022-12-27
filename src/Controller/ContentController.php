@@ -6,18 +6,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 
 use MikeAmelung\CranialBundle\ContentManager\ContentManager;
 
-/**
- * @Route("/cranial")
- */
 class ContentController extends AbstractController
 {
-    /**
-     * @Route("/content-types", name="mikeamelung_cranial_get_types", methods={"GET"})
-     */
     public function contentTypes(
         ContentManager $contentManager,
         Request $request
@@ -30,9 +23,6 @@ class ContentController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/content-templates", name="mikeamelung_cranial_get_templates", methods={"GET"})
-     */
     public function contentTemplates(
         ContentManager $contentManager,
         Request $request
@@ -45,9 +35,6 @@ class ContentController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/page-templates", name="mikeamelung_cranial_get_pages", methods={"GET"})
-     */
     public function pageTemplates(
         ContentManager $contentManager,
         Request $request
@@ -60,9 +47,6 @@ class ContentController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/all-content", name="mikeamelung_cranial_all_content", methods={"GET"})
-     */
     public function allContent(ContentManager $contentManager, Request $request)
     {
         $content = $contentManager->allContent();
@@ -73,9 +57,6 @@ class ContentController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/content/{id}", name="mikeamelung_cranial_get_content", methods={"GET"})
-     */
     public function content(
         ContentManager $contentManager,
         Request $request,
@@ -89,9 +70,6 @@ class ContentController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/content/create", name="mikeamelung_cranial_create_content", methods={"POST"})
-     */
     public function createContent(
         ContentManager $contentManager,
         Request $request
@@ -107,9 +85,6 @@ class ContentController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/content/update", name="mikeamelung_cranial_update_content", methods={"POST"})
-     */
     public function updateContent(
         ContentManager $contentManager,
         Request $request
@@ -127,9 +102,6 @@ class ContentController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/content/{id}", name="mikeamelung_cranial_delete_content", methods={"DELETE"})
-     */
     public function deleteContent(
         ContentManager $contentManager,
         Request $request,
@@ -142,9 +114,6 @@ class ContentController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/all-files", name="mikeamelung_cranial_all_files", methods={"GET"})
-     */
     public function allFiles(ContentManager $contentManager, Request $request)
     {
         $files = $contentManager->allFiles();
@@ -156,8 +125,6 @@ class ContentController extends AbstractController
     }
 
     /**
-     * @Route("/file/{id}", name="mikeamelung_cranial_get_file", methods={"GET"})
-     *
      * Function name is getFile to avoid collision with AbstractController::file
      */
     public function getFile(ContentManager $contentManager, Request $request, $id)
@@ -170,9 +137,6 @@ class ContentController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/file/create", name="mikeamelung_cranial_create_file", methods={"POST"})
-     */
     public function createFile(ContentManager $contentManager, Request $request)
     {
         $r = json_decode($request->request->get('json'), true);
@@ -195,9 +159,6 @@ class ContentController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/file/update", name="mikeamelung_cranial_update_file", methods={"POST"})
-     */
     public function updateFile(ContentManager $contentManager, Request $request)
     {
         $r = json_decode($request->request->get('json'), true);
@@ -215,9 +176,6 @@ class ContentController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/file/{id}", name="mikeamelung_cranial_delete_file", methods={"DELETE"})
-     */
     public function deleteFile(
         ContentManager $contentManager,
         Request $request,
@@ -230,9 +188,6 @@ class ContentController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/all-images", name="mikeamelung_cranial_all_images", methods={"GET"})
-     */
     public function allImages(ContentManager $contentManager, Request $request)
     {
         $images = $contentManager->allImages();
@@ -243,9 +198,6 @@ class ContentController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/image/{id}", name="mikeamelung_cranial_get_image", methods={"GET"})
-     */
     public function image(ContentManager $contentManager, Request $request, $id)
     {
         $image = $contentManager->image($id);
@@ -256,9 +208,6 @@ class ContentController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/image/create", name="mikeamelung_cranial_create_image", methods={"POST"})
-     */
     public function createImage(
         ContentManager $contentManager,
         Request $request
@@ -275,9 +224,6 @@ class ContentController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/image/update", name="mikeamelung_cranial_update_image", methods={"POST"})
-     */
     public function updateImage(
         ContentManager $contentManager,
         Request $request
@@ -293,9 +239,6 @@ class ContentController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/image/{id}", name="mikeamelung_cranial_delete_image", methods={"DELETE"})
-     */
     public function deleteImage(
         ContentManager $contentManager,
         Request $request,
@@ -308,9 +251,6 @@ class ContentController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/all-pages", name="mikeamelung_cranial_all_pages", methods={"GET"})
-     */
     public function allPages(ContentManager $contentManager, Request $request)
     {
         $pages = $contentManager->allPages();
@@ -321,9 +261,6 @@ class ContentController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/page/{id}", name="mikeamelung_cranial_get_page", methods={"GET"})
-     */
     public function page(ContentManager $contentManager, Request $request, $id)
     {
         $page = $contentManager->page($id);
@@ -334,9 +271,6 @@ class ContentController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/page/create", name="mikeamelung_cranial_create_page", methods={"POST"})
-     */
     public function createPage(ContentManager $contentManager, Request $request)
     {
         $r = json_decode($request->getContent(), true);
@@ -350,9 +284,6 @@ class ContentController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/page/update", name="mikeamelung_cranial_update_page", methods={"POST"})
-     */
     public function updatePage(ContentManager $contentManager, Request $request)
     {
         $r = json_decode($request->getContent(), true);
@@ -376,9 +307,6 @@ class ContentController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/page/{id}", name="mikeamelung_cranial_delete_page", methods={"DELETE"})
-     */
     public function deletePage(
         ContentManager $contentManager,
         Request $request,
