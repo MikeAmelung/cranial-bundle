@@ -2,23 +2,24 @@
 
 namespace MikeAmelung\CranialBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-use Ramsey\Uuid\Doctrine\UuidGenerator;
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\CustomIdGenerator;
+use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\Table;
 
-/**
- * @ORM\Entity
- * @ORM\Table(name="cranial_images")
- */
+#[Entity]
+#[Table(name: "cranial_images")]
 class Image
 {
     /**
      * @var \Ramsey\Uuid\UuidInterface
-     *
-     * @ORM\Id
-     * @ORM\Column(type="uuid", unique=true)
-     * @ORM\GeneratedValue(strategy="CUSTOM")
-     * @ORM\CustomIdGenerator(class=UuidGenerator::class)
      */
+    #[Id]
+    #[Column(type: "uuid", unique: true)]
+    #[GeneratedValue(strategy: "CUSTOM")]
+    #[CustomIdGenerator(class: Ramsey\Uuid\Doctrine\UuidGenerator::class)]
     protected $id;
 
     public function getId()
@@ -31,9 +32,7 @@ class Image
         $this->id = $id;
     }
 
-    /**
-     * @ORM\Column(type="json")
-     */
+    #[Column(type: "json")]
     private $payload;
 
     public function getPayload()
