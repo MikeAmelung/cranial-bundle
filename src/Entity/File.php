@@ -19,7 +19,7 @@ class File
     #[Id]
     #[Column(type: "uuid", unique: true)]
     #[GeneratedValue(strategy: "CUSTOM")]
-    #[CustomIdGenerator(class: Ramsey\Uuid\Doctrine\UuidGenerator::class)]
+    #[CustomIdGenerator(class: \Ramsey\Uuid\Doctrine\UuidGenerator::class)]
     protected $id;
 
     public function getId()
