@@ -383,7 +383,9 @@ class ContentManager
 
         if (isset($page['contentMap'][$slotKey])) {
             foreach ($page['contentMap'][$slotKey] as $contentId) {
-                $output .= $this->renderContent($contentId);
+                if ($contentId) {
+                    $output .= $this->renderContent($contentId);
+                }
             }
         }
 
