@@ -36,6 +36,10 @@ services:
     MikeAmelung\CranialBundle\Twig\CranialExtension:
         arguments: ['@MikeAmelung\CranialBundle\Utils\Markdown']
         tags: ['twig.extension']
+    MikeAmelung\CranialBundle\Twig\CranialContentFunctionRuntime:
+        arguments:
+            $contentManager: '@MikeAmelung\CranialBundle\ContentManager\ContentManager'
+        tags: ['twig.runtime']
     MikeAmelung\CranialBundle\Twig\CranialFileFunctionRuntime:
         arguments:
             $contentManager: '@MikeAmelung\CranialBundle\ContentManager\ContentManager'

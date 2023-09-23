@@ -323,13 +323,13 @@ class ContentManager
 
         $content = $this->storage->content($id);
 
+        $contentData = $content['data'];
+        $contentType = $this->types[$content['typeKey']];
+
         /*
          * This is to allow using {{ cranial_image(imageId) }} and {{ cranial_file(fileId) }} functions
          * in the managed content.
          */
-        $contentData = $content['data'];
-        $contentType = $this->types[$content['typeKey']];
-
         $templatable = [];
         $this->findTemplatable($contentType['definition'], $templatable);
 
@@ -338,8 +338,69 @@ class ContentManager
         }
 
         if ($content && isset($content['templateKey'])) {
+            $templateName = $content['templateKey'];
+
             $output .= $this->twig->render(
-                'content/' . $content['templateKey'] . '.html.twig',
+                'content/' . $templateName . '.html.twig',
+                array_merge(
+                    [
+                        'id' => $id,
+                    ],
+                    $contentData
+                )
+            );
+        }
+
+        if ($container) {
+            $output .= "</{$container['tag']}>";
+        }
+
+        if ($output) {
+            return $output;
+        }
+
+        return "<div data-content-id=\"$id\"></div>";
+    }
+
+    public function renderContentWithDifferentTemplate($id, $container = ['tag' => 'div'], $templateOverride = '')
+    {
+        if ($container) {
+            $attrs = '';
+
+            if (isset($container['attr'])) {
+                foreach ($container['attr'] as $attr => $val) {
+                    $attrs .= "$attr=\"$val\" ";
+                }
+            }
+
+            $attrs = trim($attrs);
+
+            $output = "<{$container['tag']} data-content-id=\"$id\" $attrs>";
+        } else {
+            $output = '';
+        }
+
+        $content = $this->storage->content($id);
+
+        $contentData = $content['data'];
+        $contentType = $this->types[$content['typeKey']];
+
+        /*
+         * This is to allow using {{ cranial_image(imageId) }} and {{ cranial_file(fileId) }} functions
+         * in the managed content.
+         */
+        $templatable = [];
+        $this->findTemplatable($contentType['definition'], $templatable);
+
+        foreach ($templatable as $path) {
+            $this->templateTemplatable($path, $contentData);
+        }
+
+        if ($content && (isset($content['templateKey']) || $templateOverride)) {
+            $templateName = $templateOverride ? $templateOverride : $content['templateKey'];
+
+            $output .= $this->twig->render(
+                'content/' . $templateName . '.html.twig',
                 array_merge(
                     [
                         'id' => $id,

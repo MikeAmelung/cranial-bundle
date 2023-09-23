@@ -6,8 +6,6 @@ use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 
-use MikeAmelung\CranialBundle\Twig\CranialFileUrlFunctionRuntime;
-use MikeAmelung\CranialBundle\Twig\CranialImageUrlFunctionRuntime;
 use MikeAmelung\CranialBundle\Utils\Markdown;
 
 class CranialExtension extends AbstractExtension
@@ -52,6 +50,10 @@ class CranialExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
+            new TwigFunction('cranial_content', [
+                CranialContentFunctionRuntime::class,
+                'content',
+            ]),
             new TwigFunction('cranial_file', [
                 CranialFileFunctionRuntime::class,
                 'file',
