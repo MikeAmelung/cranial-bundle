@@ -443,9 +443,18 @@ class ContentManager
         $page = $this->storage->page($pageId);
 
         if (isset($page['contentMap'][$slotKey])) {
-            foreach ($page['contentMap'][$slotKey] as $contentId) {
-                if ($contentId) {
-                    $output .= $this->renderContent($contentId);
+            foreach ($page['contentMap'][$slotKey] as $slotEntry) {
+                /*
+                    TODO:
+                    This check is to work with old slots ["content-id-1"]
+                    New style slots are [{"__reactKey": "react-key-1", "contentId": "content-id-1"}]
+                */
+                if (is_string($slotEntry) && $slotEntry) {
+                    $output .= $this->renderContent($slotEntry);
+                } else {
+                    if ($slotEntry['contentId']) {
+                        $output .= $this->renderContent($slotEntry['contentId']);
+                    }
                 }
             }
         }
