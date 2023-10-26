@@ -10,7 +10,8 @@
         "scienta/doctrine-json-functions": "^5.0",
         "symfony/mime": "^5.3 || ^6.0",
         "aws/aws-sdk-php": "^3.172",
-        "league/commonmark": "^2.0"
+        "league/commonmark": "^2.0",
+        "embed/embed": "^4.4"
     },
     "autoload": {
         "psr-4": {
