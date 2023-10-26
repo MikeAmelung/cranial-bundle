@@ -4,6 +4,8 @@ namespace MikeAmelung\CranialBundle\Utils;
 
 use League\CommonMark\Environment\Environment;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
+use League\CommonMark\Extension\Embed\Bridge\OscaroteroEmbedAdapter;
+use League\CommonMark\Extension\Embed\EmbedExtension;
 use League\CommonMark\Extension\GithubFlavoredMarkdownExtension;
 use League\CommonMark\Extension\InlinesOnly\InlinesOnlyExtension;
 use League\CommonMark\Extension\Attributes\AttributesExtension;
@@ -16,14 +18,25 @@ class Markdown
 
     public function __construct()
     {
-        $environment = new Environment(['allow_unsafe_links' => false]);
+        $config = [
+            'allow_unsafe_links' => false,
+            'embed' => [
+                'adapter' => new OscaroteroEmbedAdapter(),
+                'allowed_domains' => ['youtube.com', 'vimeo.com'],
+                'fallback' => 'link',
+            ],
+        ];
+
+        $environment = new Environment($config);
+
         $environment->addExtension(new CommonMarkCoreExtension());
         $environment->addExtension(new GithubFlavoredMarkdownExtension());
         $environment->addExtension(new AttributesExtension());
+        $environment->addExtension(new EmbedExtension());
 
         $this->converter = new MarkdownConverter($environment);
 
-        $inlineEnvironment = new Environment(['allow_unsafe_links' => false]);
+        $inlineEnvironment = new Environment($config);
         $inlineEnvironment->addExtension(new InlinesOnlyExtension());
 
         $this->inlineConverter = new MarkdownConverter($inlineEnvironment);
