@@ -31,6 +31,10 @@ class DatabaseStorage implements StorageInterface
 
     public function content($id)
     {
+        if (!$id) {
+            return null;
+        }
+
         $entity = $this->em->getRepository(Content::class)->find($id);
 
         if ($entity) {
@@ -101,6 +105,10 @@ class DatabaseStorage implements StorageInterface
 
     public function image($id)
     {
+        if (!$id) {
+            return null;
+        }
+
         $entity = $this->em->getRepository(Image::class)->find($id);
 
         if ($entity) {
@@ -150,6 +158,10 @@ class DatabaseStorage implements StorageInterface
 
     public function file($id)
     {
+        if (!$id) {
+            return null;
+        }
+
         $entity = $this->em->getRepository(File::class)->find($id);
 
         if ($entity) {
@@ -199,6 +211,10 @@ class DatabaseStorage implements StorageInterface
 
     public function page($id)
     {
+        if (!$id) {
+            return null;
+        }
+
         $entity = $this->em->getRepository(Page::class)->find($id);
 
         if ($entity) {
