@@ -7,7 +7,7 @@
         "php": "^8",
         "ramsey/uuid": "^4.0",
         "ramsey/uuid-doctrine": "^2.0",
-        "scienta/doctrine-json-functions": "^5.0",
+        "scienta/doctrine-json-functions": "^6.0",
         "symfony/mime": "^5.3 || ^6.0 || ^7.0",
         "aws/aws-sdk-php": "^3.172",
         "league/commonmark": "^2.0",
