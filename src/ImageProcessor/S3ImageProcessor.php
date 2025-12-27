@@ -3,6 +3,8 @@
 namespace MikeAmelung\CranialBundle\ImageProcessor;
 
 use Aws\S3\S3Client;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Vips\Driver as VipsDriver;
 
 class S3ImageProcessor implements ImageProcessorInterface
 {
@@ -92,51 +94,23 @@ class S3ImageProcessor implements ImageProcessorInterface
         $originalFilePath = $this->imageDirectory . '/' . $filename;
         $thumbnailFilePath = $this->imageDirectory . '/thumbnails/' . $filename;
 
-        $thumb = new \Imagick();
-        $thumb->readImageBlob(
-            $this->s3Client->getObject([
+        $manager = new ImageManager(new VipsDriver());
+
+        $imageBlob = $this->s3Client->getObject([
                 'Bucket' => $this->s3Bucket,
                 'Key' => $originalFilePath,
             ])['Body']
-        );
+        ;
 
-        if ($thumb->getImageFormat() === 'GIF') {
-            $thumb = $thumb->coalesceImages();
-            do {
-                $this->cropAndResize($thumb);
-            } while ($thumb->nextImage());
+        $image = $manager->read($imageBlob);
 
-            $thumb->deconstructImages();
-        } else {
-            $this->cropAndResize($thumb);
-        }
+        $image->cover(200, 200);
 
         $this->s3Client->putObject([
             'Bucket' => $this->s3Bucket,
             'Key' => $thumbnailFilePath,
-            'Body' => $thumb->getImageBlob(),
-            'ContentType' => $thumb->getImageMimeType(),
+            'Body' => (string) $image,
+            'ContentType' => $image->mediaType(),
         ]);
-
-        $thumb->destroy();
-    }
-
-    private function cropAndResize(&$thumb)
-    {
-        $width = $thumb->getImageWidth();
-        $height = $thumb->getImageHeight();
-
-        if ($width === $height) {
-        } elseif ($width > $height) {
-            $trimStart = floor(($width - $height) / 2);
-            $thumb->cropImage($height, $height, $trimStart, 0);
-            $thumb->setImagePage($height, $height, 0, 0);
-        } else {
-            $trimStart = floor(($height - $width) / 2);
-            $thumb->cropImage($width, $width, 0, $trimStart);
-            $thumb->setImagePage($width, $width, 0, 0);
-        }
-
-        $thumb->resizeImage(200, 200, \Imagick::FILTER_LANCZOS, 1);
     }
 }

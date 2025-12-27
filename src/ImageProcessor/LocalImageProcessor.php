@@ -2,6 +2,9 @@
 
 namespace MikeAmelung\CranialBundle\ImageProcessor;
 
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Vips\Driver as VipsDriver;
+
 class LocalImageProcessor implements ImageProcessorInterface
 {
     private $imageDirectory;
@@ -67,40 +70,12 @@ class LocalImageProcessor implements ImageProcessorInterface
         $originalFilePath = $this->imageDirectory . '/' . $filename;
         $thumbnailFilePath = $this->imageDirectory . '/thumbnails/' . $filename;
 
-        $thumb = new \Imagick($originalFilePath);
+        $manager = new ImageManager(new VipsDriver());
 
-        if ($thumb->getImageFormat() === 'GIF') {
-            $thumb = $thumb->coalesceImages();
-            do {
-                $this->cropAndResize($thumb);
-            } while ($thumb->nextImage());
+        $image = $manager->read($originalFilePath);
 
-            $thumb->deconstructImages();
-            $thumb->writeImages($thumbnailFilePath, true);
-        } else {
-            $this->cropAndResize($thumb);
-            $thumb->writeImage($thumbnailFilePath);
-        }
+        $image->cover(200, 200);
 
-        $thumb->destroy();
-    }
-
-    private function cropAndResize(&$thumb)
-    {
-        $width = $thumb->getImageWidth();
-        $height = $thumb->getImageHeight();
-
-        if ($width === $height) {
-        } elseif ($width > $height) {
-            $trimStart = floor(($width - $height) / 2);
-            $thumb->cropImage($height, $height, $trimStart, 0);
-            $thumb->setImagePage($height, $height, 0, 0);
-        } else {
-            $trimStart = floor(($height - $width) / 2);
-            $thumb->cropImage($width, $width, 0, $trimStart);
-            $thumb->setImagePage($width, $width, 0, 0);
-        }
-
-        $thumb->resizeImage(200, 200, \Imagick::FILTER_LANCZOS, 1);
+        $image->save($thumbnailFilePath);
     }
 }
