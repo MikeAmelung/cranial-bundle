@@ -102,7 +102,7 @@ class S3ImageProcessor implements ImageProcessorInterface
             ])['Body']
         ;
 
-        $image = $manager->read($imageBlob);
+        $image = $manager->decodeBinary($imageBlob);
 
         $image->cover(200, 200);
 

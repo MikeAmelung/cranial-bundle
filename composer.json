@@ -12,8 +12,8 @@
         "aws/aws-sdk-php": "^3.172",
         "league/commonmark": "^2.0",
         "embed/embed": "^4.4",
-        "intervention/image": "^3.11",
-        "intervention/image-driver-vips": "^1.0"
+        "intervention/image": "^4.1",
+        "intervention/image-driver-vips": "^4.0"
     },
     "autoload": {
         "psr-4": {

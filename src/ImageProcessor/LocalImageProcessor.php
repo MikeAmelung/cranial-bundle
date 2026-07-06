@@ -72,7 +72,7 @@ class LocalImageProcessor implements ImageProcessorInterface
 
         $manager = new ImageManager(new VipsDriver());
 
-        $image = $manager->read($originalFilePath);
+        $image = $manager->decodePath($originalFilePath);
 
         $image->cover(200, 200);
 
